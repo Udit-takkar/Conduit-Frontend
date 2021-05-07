@@ -3,6 +3,8 @@ import { Switch, Route } from "react-router-dom";
 import SignIn from "./components/SignIn";
 import CoreLayout from "./layouts/CoreLayout";
 import SignUp from "./components/SignUp";
+import Settings from "./components/Settings";
+import NewPost from "./components/NewPost";
 
 function Routes() {
   return (
@@ -15,6 +17,12 @@ function Routes() {
       </Route>
       <Route exact path="/signup">
         <SignUp />
+      </Route>
+      <Route exact path="/settings">
+        <Settings />
+      </Route>
+      <Route exact path="/newpost">
+        <NewPost />
       </Route>
     </Switch>
   );
