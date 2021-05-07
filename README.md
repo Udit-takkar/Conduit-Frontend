@@ -1,3 +1,15 @@
+### `To do`
+Settings page (URL: /#/settings )
+Editor page to create/edit articles (URL: /#/editor, /#/editor/article-slug-here )
+Article page (URL: /#/article/article-slug-here )
+Delete article button (only shown to article's author)
+Render markdown from server client side
+Comments section at bottom of page
+Delete comment button (only shown to comment's author)
+Profile page (URL: /#/profile/:username, /#/profile/:username/favorites )
+Show basic user info
+List of articles populated from author's created articles or author's favorited articles
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
 ## Available Scripts
