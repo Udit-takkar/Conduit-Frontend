@@ -1,13 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { MarkFavourite } from "../api/MarkFavourite";
+import { getArticleBySlug } from "../api/ArticleByslug";
+import { MarkUnFavourite } from "../api/MarkUnFavorite";
+import { isFavourite } from "../api/IsFavourite";
+import { isUserLoggedIn } from "../features/authentication/signup";
+import { useSelector } from "react-redux";
 
-function ArticleCard({ username, image, title, description, createdAt, slug }) {
+function ArticleCard({
+  username,
+  image,
+  title,
+  description,
+  createdAt,
+  slug,
+  favoritesCount,
+}) {
+  const isLoggedIn = useSelector(isUserLoggedIn);
   const history = useHistory();
   const goToArticle = (slug) => {
     history.push(`/articles/${slug}`);
+  };
+  const goToProfile = (username) => {
+    history.push(`/api/profiles/${username}`);
+  };
+  const [favorites, setFavorites] = useState(favoritesCount);
+
+  const handlefavorite = async (slug) => {
+    if (isLoggedIn === true) {
+      const checkFavorite = await isFavourite(slug);
+      if (checkFavorite.article.favorited === true) {
+        const unFavorite = await MarkUnFavourite(slug);
+        console.log(unFavorite);
+        setFavorites(unFavorite.article.favoritesCount);
+      } else {
+        const data = await MarkFavourite(slug);
+        setFavorites(data.article.favoritesCount);
+      }
+    }
   };
   return (
     <ArticleCardContainer>
@@ -20,11 +53,12 @@ function ArticleCard({ username, image, title, description, createdAt, slug }) {
           />
         </div>
         <Author>
-          <h4>{username}</h4>
+          <h4 onClick={() => goToProfile(username)}>{username}</h4>
           <p>{createdAt}</p>
         </Author>
-        <Like onClick>
+        <Like onClick={() => handlefavorite(slug)}>
           <FontAwesomeIcon icon={faHeart} />
+          {favorites}
         </Like>
       </AuthorContainer>
 
@@ -53,11 +87,13 @@ const Like = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  // flex-direction: column;
   color: #5cb85c;
   background-image: none;
   background-color: transparent;
   border-color: #5cb85c;
+  font-size: 13px;
+  cursor: pointer;
 `;
 const AuthorContainer = styled.div`
   display: flex;
@@ -73,10 +109,15 @@ const PostContainer = styled.div`
   > h2 {
     margin: 0px;
     cursor: pointer;
+    font-weight: 600 !important;
+    font-size: 1.5rem !important;
   }
   > p {
     margin: 0px;
     cursor: pointer;
+    font-weight: 300;
+
+    color: #999;
   }
 `;
 const Author = styled.div`
@@ -87,19 +128,21 @@ const Author = styled.div`
   margin-left: 5px;
 
   > h4 {
-    font-size: 10px;
+    font-size: 15px;
     display: inline-block;
-
+    font-weight: 500 !important;
     margin: 0px;
+    color: #5cb85c;
+    cursor: pointer;
   }
   > p {
-    font-size: 10px;
+    font-size: 0.7rem;
     margin: 0px;
   }
 `;
 const readmore = {
-  fontSize: "10px",
-  marginTop: "10px",
+  fontSize: "13px",
+  marginTop: "20px",
   textDecoration: "none",
   color: "#bbb",
 };

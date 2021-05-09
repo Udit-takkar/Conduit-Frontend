@@ -51,6 +51,7 @@ const BannerContainer = styled.div`
     border: none;
     color: #999;
     border: 1px solid #999;
+    z-index: 0;
   }
 `;
 const ProfileDetails = styled.div`

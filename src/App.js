@@ -10,19 +10,24 @@ import {
   navItems,
   getArticlesCount,
   loading,
+  activeItem,
 } from "./features/articles/articleSlice";
 import { useDispatch, useSelector } from "react-redux";
 import uuid from "react-uuid";
 import { isUserLoggedIn } from "./features/authentication/signup";
+import Pagination from "./components/Pagination";
 
 function App() {
   const isLoggedIn = useSelector(isUserLoggedIn);
+  const getActiveItem = useSelector(activeItem);
   const checkNav = (NavItem) => {
     if (isLoggedIn === false && NavItem === "Your Feed") {
       return false;
     } else return true;
   };
-
+  const [activeTab, setActiveTab] = useState({
+    getPageArticles: fetchGlobalArticles,
+  });
   const dispatch = useDispatch();
 
   const isLoading = useSelector(loading);
@@ -34,16 +39,22 @@ function App() {
 
   useEffect(() => {
     const getInitalArticles = async () => {
-      await dispatch(fetchGlobalArticles());
+      await dispatch(fetchGlobalArticles(1));
     };
     getInitalArticles();
   }, []);
 
   const handleFeed = async (item) => {
     if (item === "Global Feed") {
-      await dispatch(fetchGlobalArticles());
+      await dispatch(fetchGlobalArticles(1));
+      setActiveTab({
+        getPageArticles: fetchGlobalArticles,
+      });
     } else {
-      await dispatch(fetchFeedArticles());
+      await dispatch(fetchFeedArticles(1));
+      setActiveTab({
+        getPageArticles: fetchFeedArticles,
+      });
     }
   };
 
@@ -52,7 +63,11 @@ function App() {
       <NavBar>
         {NavItems.map((item) => {
           return (
-            <button key={uuid()} onClick={() => handleFeed(item)}>
+            <button
+              className={getActiveItem === item ? "active" : null}
+              key={item}
+              onClick={() => handleFeed(item)}
+            >
               {item}
             </button>
           );
@@ -68,6 +83,7 @@ function App() {
                 author: { username: username, image: image },
                 title,
                 description,
+                favoritesCount,
                 createdAt,
               } = article;
               return (
@@ -78,11 +94,17 @@ function App() {
                   title={title}
                   description={description}
                   createdAt={createdAt}
+                  favoritesCount={favoritesCount}
+                  slug={article.slug}
                 />
               );
             })
           )}
         </ArticlesContainer>
+        <Pagination
+          articlesCount={articlesCount}
+          getPageArticles={activeTab.getPageArticles}
+        />
       </AppContainer>
     </>
   );
@@ -91,19 +113,25 @@ const AppContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 `;
 const NavBar = styled.div`
   display: flex;
   margin-top: 2rem;
-  margin-left: 3rem;
+  margin-left: 5rem;
   > button {
     display: inline-block;
     border: none;
     outline: none;
     background-color: white;
-    border-bottom: 1px solid black;
+    // border-bottom: 1px solid black;
     margin-right: 5px;
     cursor: pointer;
+    color: #aaa;
+  }
+  .active {
+    border-bottom: 1px solid green;
+    color: green;
   }
 `;
 const ArticlesContainer = styled.div``;

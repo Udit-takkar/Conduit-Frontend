@@ -18,7 +18,7 @@ const BannerContainer = styled.div`
   align-items: center;
   text-align: center;
 
-  min-height: 150px;
+  min-height: 220px;
   background-color: #5cb85c;
 `;
 const BannerText = styled.div`

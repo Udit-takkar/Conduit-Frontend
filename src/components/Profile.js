@@ -8,27 +8,38 @@ import { useSelector } from "react-redux";
 import { myArticles } from "../api/myArticles";
 import { Favourite } from "../api/favouriteArticle";
 import { useHistory } from "react-router-dom";
+import ProfilePagination from "./ProfilePagination";
 
 function Profile() {
+  const fetchMyArticles = async (page) => {
+    const data = await myArticles(page, username);
+    setArticles(data.articles);
+    setArticlesCount(data.articlesCount);
+    setActiveTab({ getArticles: fetchMyArticles, tabName: "My Articles" });
+  };
+
+  const fetchFavouriteArticles = async (page) => {
+    const data = await Favourite(page, username);
+
+    setArticles(data.articles);
+    setArticlesCount(data.articlesCount);
+    setActiveTab({
+      getArticles: fetchFavouriteArticles,
+      tabName: "Favourite Articles",
+    });
+  };
+
   const username = useSelector(getUsername);
   const history = useHistory();
   const [articles, setArticles] = useState([]);
   const [articlesCount, setArticlesCount] = useState(0);
+  const [activeTab, setActiveTab] = useState({
+    getArticles: fetchMyArticles,
+    tabName: "My Articles",
+  });
   useEffect(() => {
-    fetchMyArticles();
+    fetchMyArticles(1);
   }, []);
-  const fetchMyArticles = async () => {
-    const data = await myArticles(username);
-
-    setArticles(data.articles);
-    setArticlesCount(data.articlesCount);
-  };
-
-  const fetchFavouriteArticles = async () => {
-    const data = await Favourite(username);
-    setArticles(data.articles);
-    setArticlesCount(data.articlesCount);
-  };
 
   return (
     <>
@@ -36,8 +47,18 @@ function Profile() {
       <ProfileBanner username={username} />
       <ProfileArticles>
         <NavBar>
-          <button onClick={fetchMyArticles}>My Articles</button>
-          <button onClick={fetchFavouriteArticles}>Favourite Articles</button>
+          <button
+            className={activeTab.tabName === "My Articles" ? "active" : null}
+            onClick={fetchMyArticles}
+          >
+            My Articles
+          </button>
+          <button
+            className={activeTab.tabName === "My Articles" ? null : "active"}
+            onClick={fetchFavouriteArticles}
+          >
+            Favourite Articles
+          </button>
         </NavBar>
         <ArticlesContainer>
           {articlesCount === 0 ? (
@@ -49,7 +70,9 @@ function Profile() {
                 title,
                 description,
                 createdAt,
+                favoritesCount,
               } = article;
+
               return (
                 <ArticleCard
                   key={article.slug}
@@ -59,11 +82,16 @@ function Profile() {
                   description={description}
                   createdAt={createdAt}
                   slug={article.slug}
+                  favoritesCount={favoritesCount}
                 />
               );
             })
           )}
         </ArticlesContainer>
+        <ProfilePagination
+          articlesCount={articlesCount}
+          getPageArticles={activeTab.getArticles}
+        />
       </ProfileArticles>
     </>
   );
@@ -79,15 +107,19 @@ const NavBar = styled.div`
   margin-top: 2rem;
   margin-left: 20vw;
   align-self: flex-start;
+  color: #aaa;
   > button {
     display: inline-block;
     border: none;
     outline: none;
     background-color: white;
-    border-bottom: 1px solid black;
     margin-right: 5px;
     cursor: pointer;
-    color: light gray;
+    color: #aaa;
+  }
+  .active {
+    border-bottom: 1px solid green;
+    color: green;
   }
 `;
 const ArticlesContainer = styled.div``;

@@ -17,7 +17,6 @@ function CoreLayout({ children }) {
         <div>
           <App />
         </div>
-
         <Tags />
       </FeedAndTagContainer>
     </MainContainer>
@@ -35,6 +34,7 @@ const FeedAndTagContainer = styled.div`
   }
   > Tags {
     flex: 0.25;
+    height: 220px;
   }
 `;
 export default CoreLayout;

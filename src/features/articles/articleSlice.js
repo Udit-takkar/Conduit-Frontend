@@ -7,34 +7,38 @@ const initialState = {
   articles: [],
   articlesCount: 0,
   navItems: ["Your Feed", "Global Feed"],
+  activeItem: "Global Feed",
 };
 
 const FeedArticlesURL =
-  "https://conduit.productionready.io/api/articles/feed?limit=10&offset=0";
+  "https://conduit.productionready.io/api/articles/feed?limit=10&offset=";
 const globalURL =
-  "https://conduit.productionready.io/api/articles?limit=10&offset=0";
+  "https://conduit.productionready.io/api/articles?limit=10&offset=";
 const tagURL = "https://conduit.productionready.io/api/articles?tag=";
 
-export const fetchFeedArticles = createAsyncThunk("articles/feed", async () => {
-  const token = JSON.stringify(localStorage.getItem("token"));
-  try {
-    const response = await axios.get(FeedArticlesURL, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
-    console.log(response.data);
-    return response.data;
-  } catch (e) {
-    console.log(e);
-    return e;
+export const fetchFeedArticles = createAsyncThunk(
+  "articles/feed",
+  async (page) => {
+    const token = JSON.stringify(localStorage.getItem("token"));
+    try {
+      const response = await axios.get(`${FeedArticlesURL}${(page - 1) * 10}`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      console.log(response.data);
+      return response.data;
+    } catch (e) {
+      console.log(e.response);
+      return e;
+    }
   }
-});
+);
 export const fetchGlobalArticles = createAsyncThunk(
   "articles/global",
-  async () => {
+  async (page) => {
     try {
-      const response = await axios.get(globalURL);
+      const response = await axios.get(`${globalURL}${(page - 1) * 10}`);
       console.log(response.data);
       return response.data;
     } catch (e) {
@@ -47,11 +51,13 @@ export const fetchGlobalArticles = createAsyncThunk(
 export const fetchArticlesByTag = createAsyncThunk(
   "articles/tag",
 
-  async (tag, { getState, dispatch }) => {
-    console.log(getState().articleSlice.navItems);
-
+  async ({ page, tag }) => {
+    // console.log(getState().articleSlice.navItems);
+    console.log(page, tag);
     try {
-      const response = await axios.get(`${tagURL}${tag}`);
+      const response = await axios.get(
+        `${tagURL}${tag}&limit=10&offset=${(page - 1) * 10}`
+      );
       return response.data;
     } catch (err) {
       console.log(err);
@@ -76,6 +82,7 @@ export const articleSlice = createSlice({
         articles: [],
         articlesCount: 0,
         navItems: ["Your Feed", "Global Feed"],
+        activeItem: "Your Feed",
       });
     },
     [fetchFeedArticles.fulfilled]: (state, action) => {
@@ -85,6 +92,7 @@ export const articleSlice = createSlice({
         articles: action.payload.articles,
         articlesCount: action.payload.articlesCount,
         navItems: ["Your Feed", "Global Feed"],
+        activeItem: "Your Feed",
       });
     },
     [fetchFeedArticles.rejected]: (state, action) => {
@@ -94,6 +102,7 @@ export const articleSlice = createSlice({
         articles: [],
         articlesCount: 0,
         navItems: ["Your Feed", "Global Feed"],
+        activeItem: "Your Feed",
       });
     },
     [fetchGlobalArticles.pending]: (state, action) => {
@@ -104,6 +113,7 @@ export const articleSlice = createSlice({
         articles: [],
         articlesCount: 0,
         navItems: ["Your Feed", "Global Feed"],
+        activeItem: "Global Feed",
       });
     },
     [fetchGlobalArticles.fulfilled]: (state, action) => {
@@ -113,6 +123,7 @@ export const articleSlice = createSlice({
         articles: action.payload.articles,
         articlesCount: action.payload.articlesCount,
         navItems: ["Your Feed", "Global Feed"],
+        activeItem: "Global Feed",
       });
     },
     [fetchGlobalArticles.rejected]: (state, action) => {
@@ -123,6 +134,7 @@ export const articleSlice = createSlice({
         articles: [],
         articlesCount: 0,
         navItems: ["Your Feed", "Global Feed"],
+        activeItem: "Global Feed",
       });
     },
     [fetchArticlesByTag.pending]: (state, action) => {
@@ -133,24 +145,25 @@ export const articleSlice = createSlice({
         articles: [],
         articlesCount: 0,
         navItems: ["Your Feed", "Global Feed"],
+        activeItem: "Global Feed",
       });
     },
     [fetchArticlesByTag.fulfilled]: (state, action) => {
       let updateNavItems = state.navItems;
       if (state.navItems.length === 3) {
-        updateNavItems[2] = action.meta.arg;
+        updateNavItems[2] = action.meta.arg.tag;
       } else {
-        updateNavItems = [...updateNavItems, action.meta.arg];
+        updateNavItems = [...updateNavItems, action.meta.arg.tag];
       }
-
+      console.log(action);
       Object.assign(state, {
         loading: false,
         error: null,
         articles: action.payload.articles,
         articlesCount: action.payload.articlesCount,
         navItems: updateNavItems,
+        activeItem: action.meta.arg.tag,
       });
-      console.log(state);
     },
     [fetchArticlesByTag.rejected]: (state, action) => {
       console.log(action);
@@ -160,6 +173,7 @@ export const articleSlice = createSlice({
         articles: [],
         articlesCount: 0,
         navItems: ["Your Feed", "Global Feed"],
+        activeItem: action.meta.arg.tag,
       });
     },
   },
@@ -171,4 +185,5 @@ export const getArticles = (state) => {
 export const getArticlesCount = (state) => state.articleSlice.articlesCount;
 export const loading = (state) => state.articleSlice.loading;
 export const navItems = (state) => state.articleSlice.navItems;
+export const activeItem = (state) => state.articleSlice.activeItem;
 export default articleSlice.reducer;

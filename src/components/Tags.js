@@ -30,7 +30,7 @@ function Tags() {
         return (
           <TagsList
             onClick={() => {
-              dispatch(fetchArticlesByTag(tag));
+              dispatch(fetchArticlesByTag({ page: 1, tag }));
             }}
             key={uuid()}
           >
@@ -60,8 +60,10 @@ const TagsList = styled.div`
 `;
 const TagContainer = styled.div`
   max-width: 200px;
-  min-height: fit-content;
+  padding: 0.5rem;
   background: #f3f3f3;
+  margin-top: 1.5rem;
+  max-height: fit-content !important;
 `;
 
 export default Tags;

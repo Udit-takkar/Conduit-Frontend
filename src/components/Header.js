@@ -55,6 +55,7 @@ const HeaderContainer = styled.div`
   justify-content: space-between;
   box-shadow: 0 8px 6px -6px #999;
   background-color: white;
+  z-index: 2;
   > h2 {
     padding-left: 30px;
     color: #5cb85c;
