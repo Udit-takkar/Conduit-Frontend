@@ -1,8 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
-function ArticleCard({ username, image, title, description, createdAt }) {
+function ArticleCard({ username, image, title, description, createdAt, slug }) {
+  const history = useHistory();
+  const goToArticle = (slug) => {
+    history.push(`/articles/${slug}`);
+  };
   return (
     <ArticleCardContainer>
       <AuthorContainer>
@@ -17,13 +23,15 @@ function ArticleCard({ username, image, title, description, createdAt }) {
           <h4>{username}</h4>
           <p>{createdAt}</p>
         </Author>
-        <Like></Like>
+        <Like onClick>
+          <FontAwesomeIcon icon={faHeart} />
+        </Like>
       </AuthorContainer>
 
       <PostContainer>
-        <h2>{title}</h2>
-        <p>{description}</p>
-        <Link to="/" style={readmore}>
+        <h2 onClick={() => goToArticle(slug)}>{title}</h2>
+        <p onClick={() => goToArticle(slug)}>{description}</p>
+        <Link to={`/articles/${slug}`} style={readmore}>
           Read More
         </Link>
       </PostContainer>
@@ -42,6 +50,14 @@ const Like = styled.div`
   border: 1px solid black;
   height: 25px;
   width: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #5cb85c;
+  background-image: none;
+  background-color: transparent;
+  border-color: #5cb85c;
 `;
 const AuthorContainer = styled.div`
   display: flex;
@@ -56,9 +72,11 @@ const PostContainer = styled.div`
 
   > h2 {
     margin: 0px;
+    cursor: pointer;
   }
   > p {
     margin: 0px;
+    cursor: pointer;
   }
 `;
 const Author = styled.div`

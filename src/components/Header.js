@@ -20,13 +20,13 @@ function Header() {
 
         {isLoggedIn ? (
           <>
-            <Link to="/signin" style={linkStyle}>
+            <Link to="/newpost" style={linkStyle}>
               <FontAwesomeIcon icon={faPlusSquare} /> New Post
             </Link>
             <Link to="/settings" style={linkStyle}>
               <FontAwesomeIcon icon={faCog} /> Settings
             </Link>
-            <Link to="/signup" style={linkStyle}>
+            <Link to="/me" style={linkStyle}>
               {username}
             </Link>
           </>

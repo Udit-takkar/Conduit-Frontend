@@ -5,6 +5,8 @@ import CoreLayout from "./layouts/CoreLayout";
 import SignUp from "./components/SignUp";
 import Settings from "./components/Settings";
 import NewPost from "./components/NewPost";
+import Profile from "./components/Profile";
+import ArticleDisplay from "./components/ArticleDisplay";
 
 function Routes() {
   return (
@@ -23,6 +25,12 @@ function Routes() {
       </Route>
       <Route exact path="/newpost">
         <NewPost />
+      </Route>
+      <Route exact path="/me">
+        <Profile />
+      </Route>
+      <Route path="/articles/:slug">
+        <ArticleDisplay />
       </Route>
     </Switch>
   );

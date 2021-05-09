@@ -1,17 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 import styled from "styled-components";
+import { postArticle } from "../api/postArticle";
+import { Redirect } from "react-router-dom";
 
 function NewPost() {
+  const [formState, setFormState] = useState({
+    title: "",
+    description: "",
+    body: "",
+    tagList: [],
+  });
+  const [tags, setTags] = useState("");
+  const handleChange = (e) => {
+    setFormState({ ...formState, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const res = await postArticle(formState);
+
+    console.log(typeof res.data);
+    // if (typeof res.data === undefined) {
+    //   <Redirect to="/profile" />;
+    // }
+  };
+  const handleTags = (e) => {
+    setTags(e.target.value);
+    const tagsList = tags.split(" ");
+    setFormState({ ...formState, tagList: tagsList });
+  };
   return (
     <>
       <Header />
       <NewPostContainer>
-        <input placeholder="Article Title" />
-        <input placeholder="What's this article about" />
-        <textarea placeholder="Write your Article(in markdown)" />
-        <input placeholder="Enter Tags" />
-        <button>Publish Article</button>
+        <input
+          onChange={handleChange}
+          value={formState.title}
+          placeholder="Article Title"
+          name="title"
+        />
+        <input
+          onChange={handleChange}
+          value={formState.description}
+          placeholder="What's this article about"
+          name="description"
+        />
+        <textarea
+          onChange={handleChange}
+          value={formState.body}
+          placeholder="Write your Article(in markdown)"
+          name="body"
+        />
+        <input
+          onChange={handleTags}
+          value={tags}
+          placeholder="Enter Tags"
+          name="tags"
+        />
+        <button onClick={handleSubmit}>Publish Article</button>
       </NewPostContainer>
     </>
   );
