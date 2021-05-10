@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   getUsername,
@@ -6,12 +6,15 @@ import {
   getUserImg,
 } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
-import { faCog } from "@fortawesome/free-solid-svg-icons";
+import { faCog, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Redirect, Link, useHistory } from "react-router-dom";
+import { CheckFollowing } from "../api/CheckFollowing";
 
-function ProfileBanner({ username }) {
+function ProfileBanner({ username, LoggedInUsername }) {
+  console.log(LoggedInUsername, username);
   const bio = useSelector(getUserBio);
+  const [isFollowing, setIsFollowing] = useState(false);
   const history = useHistory();
   const image =
     useSelector(getUserImg) ||
@@ -19,6 +22,17 @@ function ProfileBanner({ username }) {
   const goToSettings = () => {
     history.push("settings");
   };
+  const followUser = () => {};
+  useEffect(() => {
+    const intializeState = async () => {
+      const res = await CheckFollowing(username);
+
+      console.log(res);
+      // setIsFollowing(res);
+    };
+    intializeState();
+  }, []);
+
   return (
     <BannerContainer>
       <ProfileDetails>
@@ -26,13 +40,19 @@ function ProfileBanner({ username }) {
         <h3>{username}</h3>
         <p>{bio}</p>
       </ProfileDetails>
-
-      <button onClick={goToSettings}>
-        <span>
-          <FontAwesomeIcon icon={faCog} />
-        </span>{" "}
-        Edit Profile Settings
-      </button>
+      {LoggedInUsername !== username ? (
+        <button>
+          <FontAwesomeIcon icon={faPlus} />
+          {isFollowing ? <span>Unfollow</span> : <span>Follow</span>}
+        </button>
+      ) : (
+        <button onClick={goToSettings}>
+          <span>
+            <FontAwesomeIcon icon={faCog} />
+          </span>{" "}
+          <span> Edit Profile Settings</span>
+        </button>
+      )}
     </BannerContainer>
   );
 }

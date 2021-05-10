@@ -26,7 +26,7 @@ function Routes() {
       <Route exact path="/newpost">
         <NewPost />
       </Route>
-      <Route exact path="/me">
+      <Route exact path="/profile/:username">
         <Profile />
       </Route>
       <Route path="/articles/:slug">

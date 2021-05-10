@@ -7,7 +7,7 @@ import { getUsername } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
 import { myArticles } from "../api/myArticles";
 import { Favourite } from "../api/favouriteArticle";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ProfilePagination from "./ProfilePagination";
 
 function Profile() {
@@ -28,8 +28,9 @@ function Profile() {
       tabName: "Favourite Articles",
     });
   };
+  const { username } = useParams();
+  const LoggedInUsername = useSelector(getUsername);
 
-  const username = useSelector(getUsername);
   const history = useHistory();
   const [articles, setArticles] = useState([]);
   const [articlesCount, setArticlesCount] = useState(0);
@@ -39,19 +40,23 @@ function Profile() {
   });
   useEffect(() => {
     fetchMyArticles(1);
-  }, []);
+  }, [username]);
 
   return (
     <>
       <Header />
-      <ProfileBanner username={username} />
+      <ProfileBanner username={username} LoggedInUsername={LoggedInUsername} />
       <ProfileArticles>
         <NavBar>
           <button
             className={activeTab.tabName === "My Articles" ? "active" : null}
             onClick={fetchMyArticles}
           >
-            My Articles
+            {LoggedInUsername === username ? (
+              <p>My Articles</p>
+            ) : (
+              <p>{username} Articles</p>
+            )}
           </button>
           <button
             className={activeTab.tabName === "My Articles" ? null : "active"}

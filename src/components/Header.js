@@ -26,7 +26,7 @@ function Header() {
             <Link to="/settings" style={linkStyle}>
               <FontAwesomeIcon icon={faCog} /> Settings
             </Link>
-            <Link to="/me" style={linkStyle}>
+            <Link to={`/profile/${username}`} style={linkStyle}>
               {username}
             </Link>
           </>
@@ -47,7 +47,7 @@ function Header() {
 const HeaderContainer = styled.div`
   position: sticky;
   top: 0;
-  max-height: 50px;
+  max-height: 70px;
   min-width: 100vw;
   display: flex;
   flex-direction: row;
@@ -57,7 +57,7 @@ const HeaderContainer = styled.div`
   background-color: white;
   z-index: 2;
   > h2 {
-    padding-left: 30px;
+    padding-left: 3rem;
     color: #5cb85c;
   }
 `;

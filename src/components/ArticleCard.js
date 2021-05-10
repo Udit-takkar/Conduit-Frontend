@@ -25,7 +25,7 @@ function ArticleCard({
     history.push(`/articles/${slug}`);
   };
   const goToProfile = (username) => {
-    history.push(`/api/profiles/${username}`);
+    history.push(`/profile/${username}`);
   };
   const [favorites, setFavorites] = useState(favoritesCount);
 

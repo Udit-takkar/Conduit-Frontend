@@ -90,7 +90,7 @@ const SignInForm = styled.div`
     font-size: 35px;
   }
   > input {
-    padding: 0.75rem 1.5rem;
+    padding: 1.25rem 1.5rem;
     border-radius: 0.3rem;
     border: 1px solid rgba(0, 0, 0, 0.15);
     margin-top: 10px;

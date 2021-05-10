@@ -6,7 +6,16 @@ import { getArticleBySlug } from "../api/ArticleByslug";
 import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Comments from "./Comments";
+import { isUserLoggedIn, getUsername } from "../features/authentication/signup";
+import { useSelector } from "react-redux";
+import { deleteArticle } from "../api/DeleteArticle";
+import { useHistory } from "react-router-dom";
+
 function ArticleDisplay() {
+  const history = useHistory();
+  const isLoggedIn = useSelector(isUserLoggedIn);
+  const username = useSelector(getUsername);
+
   const ColoredLine = ({ color }) => (
     <hr
       style={{
@@ -19,7 +28,7 @@ function ArticleDisplay() {
     />
   );
   const { slug } = useParams();
-  console.log(slug);
+  // console.log(slug);
   const [article, setArticle] = useState({
     username: "",
     image: "",
@@ -29,6 +38,10 @@ function ArticleDisplay() {
     body: "",
     tagList: [],
   });
+  const handleDelete = async () => {
+    await deleteArticle(slug);
+    history.push("/");
+  };
   useEffect(() => {
     const getArticle = async () => {
       const data = await getArticleBySlug(slug);
@@ -64,16 +77,23 @@ function ArticleDisplay() {
             <h4>{article.username}</h4>
             <p>{article.createdAt}</p>
           </div>
-
-          <button>
-            {" "}
-            <FontAwesomeIcon icon={faEdit} /> Edit Article
-          </button>
-          <button style={{ borderColor: "#b85c5c", color: "#b85c5c" }}>
-            {" "}
-            <FontAwesomeIcon icon={faTrashAlt} />
-            Delete Article
-          </button>
+          {isLoggedIn && article.username === username ? (
+            <>
+              {" "}
+              <button>
+                {" "}
+                <FontAwesomeIcon icon={faEdit} /> Edit Article
+              </button>
+              <button
+                onClick={handleDelete}
+                style={{ borderColor: "#b85c5c", color: "#b85c5c" }}
+              >
+                {" "}
+                <FontAwesomeIcon icon={faTrashAlt} />
+                Delete Article
+              </button>
+            </>
+          ) : null}
         </Author>
       </ArticleBanner>
       <Body>
