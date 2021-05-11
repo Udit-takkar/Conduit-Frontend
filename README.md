@@ -1,5 +1,5 @@
 ### `To do`
-Settings page (URL: /#/settings )
+
 Editor page to create/edit articles (URL: /#/editor, /#/editor/article-slug-here )
 Article page (URL: /#/article/article-slug-here )
 Delete article button (only shown to article's author)
