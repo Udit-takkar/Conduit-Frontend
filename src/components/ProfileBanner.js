@@ -6,10 +6,16 @@ import {
   getUserImg,
 } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
-import { faCog, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCog,
+  faPlus,
+  faCheckCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Redirect, Link, useHistory } from "react-router-dom";
 import { CheckFollowing } from "../api/CheckFollowing";
+import { Follow } from "../api/Follow";
+import { UnFollow } from "../api/Unfollow";
 
 function ProfileBanner({ username, LoggedInUsername }) {
   console.log(LoggedInUsername, username);
@@ -20,18 +26,27 @@ function ProfileBanner({ username, LoggedInUsername }) {
     useSelector(getUserImg) ||
     "https://static.productionready.io/images/smiley-cyrus.jpg";
   const goToSettings = () => {
-    history.push("settings");
+    history.push("/settings");
   };
-  const followUser = () => {};
+
   useEffect(() => {
     const intializeState = async () => {
       const res = await CheckFollowing(username);
 
       console.log(res);
-      // setIsFollowing(res);
+      setIsFollowing(res.profile.following);
     };
     intializeState();
   }, []);
+
+  const followUser = async () => {
+    const profile = await Follow(username);
+    setIsFollowing(profile.profile.following);
+  };
+  const UnfollowUser = async () => {
+    const profile = await UnFollow(username);
+    setIsFollowing(profile.profile.following);
+  };
 
   return (
     <BannerContainer>
@@ -41,8 +56,8 @@ function ProfileBanner({ username, LoggedInUsername }) {
         <p>{bio}</p>
       </ProfileDetails>
       {LoggedInUsername !== username ? (
-        <button>
-          <FontAwesomeIcon icon={faPlus} />
+        <button onClick={isFollowing ? UnfollowUser : followUser}>
+          <FontAwesomeIcon icon={isFollowing ? faCheckCircle : faPlus} />
           {isFollowing ? <span>Unfollow</span> : <span>Follow</span>}
         </button>
       ) : (

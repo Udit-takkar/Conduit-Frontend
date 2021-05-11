@@ -34,8 +34,8 @@ function SignIn() {
         <SignInContainer>
           <Header />
           <SignInForm>
-            <h3>Sign In</h3>
-            <Link to="/" style={needaccount}>
+            <h3>SIGN IN</h3>
+            <Link to="/signup" style={needaccount}>
               Need a account
             </Link>
             <input
@@ -67,6 +67,7 @@ const SignInForm = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 4rem;
   > h3 {
     font-weight: 500;
     line-height: 1.1;
@@ -77,11 +78,11 @@ const SignInForm = styled.div`
     border-radius: 0.3rem;
     border: 1px solid rgba(0, 0, 0, 0.15);
     margin-top: 10px;
-    min-width: 35vw;
+    min-width: 40vw;
   }
   > button {
     display: inline-block;
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 2rem;
     font-size: 1rem;
     border-radius: 0.3rem;
     color: #fff;

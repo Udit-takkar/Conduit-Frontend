@@ -58,7 +58,19 @@ export const update = createAsyncThunk("signup/update", updateUser);
 export const SignUpSlice = createSlice({
   name: "signup",
   initialState,
-  reducers: {},
+  reducers: {
+    logoutUser: (state, action) => {
+      Object.assign(state, {
+        loading: false,
+        error: null,
+        isLoggedIn: false,
+        username: "",
+        email: "",
+        bio: "",
+        image: null,
+      });
+    },
+  },
   extraReducers: {
     [signup.pending]: (state, action) => {
       Object.assign(state, {
@@ -177,4 +189,5 @@ export const getUsername = (state) => state.signup.username;
 export const getUserEmail = (state) => state.signup.email;
 export const getUserImg = (state) => state.signup.image;
 export const getUserBio = (state) => state.signup.bio;
+export const { logoutUser } = SignUpSlice.actions;
 export default SignUpSlice.reducer;

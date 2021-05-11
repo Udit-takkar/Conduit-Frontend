@@ -6,13 +6,18 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { faPlusSquare } from "@fortawesome/free-solid-svg-icons";
+import { useHistory } from "react-router-dom";
 
 function Header() {
+  const history = useHistory();
   const isLoggedIn = useSelector(isUserLoggedIn);
   const username = useSelector(getUsername);
+  const goToHome = () => {
+    history.push("/");
+  };
   return (
     <HeaderContainer>
-      <h2>conduit</h2>
+      <h2 onClick={goToHome}>conduit</h2>
       <HeaderLinks>
         <Link to="/" style={linkStyle}>
           Home
@@ -59,6 +64,7 @@ const HeaderContainer = styled.div`
   > h2 {
     padding-left: 3rem;
     color: #5cb85c;
+    cursor: pointer;
   }
 `;
 const HeaderLinks = styled.div`

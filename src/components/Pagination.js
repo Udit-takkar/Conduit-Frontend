@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { navItems } from "../features/articles/articleSlice";
@@ -8,10 +8,12 @@ function Pagination({ articlesCount, getPageArticles }) {
   const dispatch = useDispatch();
   const tabs = useSelector(navItems);
   const NumberOfPages = [];
+  const [isActive, setIsActive] = useState(1);
   for (let i = 1; i <= Math.ceil(articlesCount / 10); ++i) {
     NumberOfPages.push(i);
   }
   const handlePages = async (page) => {
+    setIsActive(page);
     if (tabs.length !== 3) {
       await dispatch(getPageArticles(page));
     } else {
@@ -22,7 +24,14 @@ function Pagination({ articlesCount, getPageArticles }) {
   return (
     <PageContainer>
       {NumberOfPages.map((page) => (
-        <PagesBox key={page} onClick={() => handlePages(page)}>
+        <PagesBox
+          key={page}
+          onClick={() => handlePages(page)}
+          style={{
+            backgroundColor: isActive === page ? "#5cb85c" : "white",
+            color: isActive === page ? "white" : "black",
+          }}
+        >
           {page}
         </PagesBox>
       ))}

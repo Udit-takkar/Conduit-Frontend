@@ -45,7 +45,7 @@ function SignUp() {
           {checkError && <p>{checkError.message}</p>}
           <SignInForm>
             <h3>Sign Up</h3>
-            <Link to="/" style={link}>
+            <Link to="/signin" style={link}>
               Have an account?
             </Link>
             <input

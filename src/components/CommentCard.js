@@ -2,8 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getUsername } from "../features/authentication/signup";
+import { useSelector } from "react-redux";
 
-function CommentCard({ username, image, body, createdAt }) {
+function CommentCard({ username, image, body, createdAt, id, deleteComment }) {
+  const loggedInUsername = useSelector(getUsername);
   return (
     <Card>
       <TextBox>{body}</TextBox>
@@ -14,9 +17,11 @@ function CommentCard({ username, image, body, createdAt }) {
           <p style={{ marginLeft: "20px" }}>{createdAt}</p>
         </div>
 
-        <div>
-          <FontAwesomeIcon icon={faTrashAlt} />
-        </div>
+        {loggedInUsername === username ? (
+          <button onClick={() => deleteComment(id)}>
+            <FontAwesomeIcon icon={faTrashAlt} />
+          </button>
+        ) : null}
       </UserBox>
     </Card>
   );
@@ -54,6 +59,9 @@ const UserBox = styled.div`
     > p {
       margin-left: 5px;
     }
+  }
+  > button {
+    cursor: pointer;
   }
 `;
 export default CommentCard;

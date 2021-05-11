@@ -2,9 +2,19 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { getCommentsBySlug } from "../api/Comments";
 import CommentCard from "./CommentCard";
+import { DeleteComment } from "../api/DeleteComment";
 
-function Comments({ slug }) {
+function Comments({ slug, Loading }) {
   const [comments, setComments] = useState([]);
+  const [deleting, setDeleting] = useState(false);
+  const handleDeleteComment = async (id) => {
+    setDeleting(true);
+    const res = await DeleteComment(slug, id);
+    if (res) {
+      setDeleting(false);
+    }
+    console.log(res);
+  };
   useEffect(() => {
     const fetchComments = async () => {
       const data = await getCommentsBySlug(slug);
@@ -12,7 +22,9 @@ function Comments({ slug }) {
       setComments(data.comments);
     };
     fetchComments();
-  }, []);
+    console.log(Loading);
+  }, [Loading, deleting]);
+
   return (
     <CommentContainer>
       {comments.map((comment) => {
@@ -29,6 +41,8 @@ function Comments({ slug }) {
             image={image}
             createdAt={createdAt}
             body={body}
+            id={id}
+            deleteComment={handleDeleteComment}
           />
         );
       })}

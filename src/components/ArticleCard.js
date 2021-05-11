@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,6 +20,7 @@ function ArticleCard({
   favoritesCount,
 }) {
   const isLoggedIn = useSelector(isUserLoggedIn);
+  const [isactive, setIsactive] = useState(false);
   const history = useHistory();
   const goToArticle = (slug) => {
     history.push(`/articles/${slug}`);
@@ -29,16 +30,33 @@ function ArticleCard({
   };
   const [favorites, setFavorites] = useState(favoritesCount);
 
+  useEffect(() => {
+    const intializeState = async () => {
+      console.log(isLoggedIn);
+      if (isLoggedIn === true) {
+        const checkFavorite = await isFavourite(slug);
+        // console.log(checkFavorite);
+        if (checkFavorite.article.favorited === true) {
+          setIsactive(true);
+        }
+      }
+    };
+
+    intializeState();
+  }, []);
+
   const handlefavorite = async (slug) => {
     if (isLoggedIn === true) {
-      const checkFavorite = await isFavourite(slug);
-      if (checkFavorite.article.favorited === true) {
+      // const checkFavorite = await isFavourite(slug);
+      if (isactive === true) {
         const unFavorite = await MarkUnFavourite(slug);
         console.log(unFavorite);
         setFavorites(unFavorite.article.favoritesCount);
+        setIsactive(false);
       } else {
         const data = await MarkFavourite(slug);
         setFavorites(data.article.favoritesCount);
+        setIsactive(true);
       }
     }
   };
@@ -56,7 +74,13 @@ function ArticleCard({
           <h4 onClick={() => goToProfile(username)}>{username}</h4>
           <p>{createdAt}</p>
         </Author>
-        <Like onClick={() => handlefavorite(slug)}>
+        <Like
+          onClick={() => handlefavorite(slug)}
+          style={{
+            backgroundColor: isactive ? " #5cb85c" : "transparent",
+            color: isactive ? "white" : "#5cb85c",
+          }}
+        >
           <FontAwesomeIcon icon={faHeart} />
           {favorites}
         </Like>
@@ -94,6 +118,10 @@ const Like = styled.div`
   border-color: #5cb85c;
   font-size: 13px;
   cursor: pointer;
+  :hover {
+    background-color: green;
+    color: white;
+  }
 `;
 const AuthorContainer = styled.div`
   display: flex;

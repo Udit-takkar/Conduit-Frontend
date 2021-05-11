@@ -30,7 +30,7 @@ function Profile() {
   };
   const { username } = useParams();
   const LoggedInUsername = useSelector(getUsername);
-
+  console.log(LoggedInUsername, username);
   const history = useHistory();
   const [articles, setArticles] = useState([]);
   const [articlesCount, setArticlesCount] = useState(0);

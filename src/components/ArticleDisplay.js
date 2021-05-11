@@ -10,6 +10,7 @@ import { isUserLoggedIn, getUsername } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
 import { deleteArticle } from "../api/DeleteArticle";
 import { useHistory } from "react-router-dom";
+import { postComment } from "../api/PostComment";
 
 function ArticleDisplay() {
   const history = useHistory();
@@ -38,9 +39,14 @@ function ArticleDisplay() {
     body: "",
     tagList: [],
   });
+  const [comment, setComment] = useState({
+    comment: "",
+    Loading: false,
+  });
+
   const handleDelete = async () => {
     await deleteArticle(slug);
-    history.push("/");
+    history.push(`/profile/${username}`);
   };
   useEffect(() => {
     const getArticle = async () => {
@@ -66,6 +72,20 @@ function ArticleDisplay() {
     };
     getArticle();
   }, []);
+
+  const sendComment = async () => {
+    setComment({ ...comment, Loading: true });
+    const res = await postComment(slug, comment.comment);
+
+    if (res.comment) {
+      setComment({ comment: "", Loading: false });
+    }
+    console.log(comment);
+  };
+
+  const handleChange = (e) => {
+    setComment({ ...comment, [e.target.name]: e.target.value });
+  };
   return (
     <>
       <Header />
@@ -101,12 +121,16 @@ function ArticleDisplay() {
       </Body>
       <ColoredLine color="gray" />
       <CommentBox>
-        <textarea />
-        <ButtonBox>
+        <textarea
+          name="comment"
+          value={comment.comment}
+          onChange={handleChange}
+        />
+        <ButtonBox onClick={sendComment}>
           <button>Post a comment</button>
         </ButtonBox>
       </CommentBox>
-      <Comments slug={slug} />
+      <Comments slug={slug} Loading={comment.Loading} />
     </>
   );
 }
@@ -148,6 +172,7 @@ const ButtonBox = styled.div`
     background-color: #5cb85c;
     border-color: #5cb85c;
     border: none;
+    cursor: pointer;
   }
 `;
 const Body = styled.div`

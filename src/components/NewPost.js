@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import Header from "./Header";
 import styled from "styled-components";
 import { postArticle } from "../api/postArticle";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
+import { getUsername } from "../features/authentication/signup";
+import { useSelector } from "react-redux";
 
 function NewPost() {
+  const username = useSelector(getUsername);
+  const history = useHistory();
   const [formState, setFormState] = useState({
     title: "",
     description: "",
@@ -19,8 +23,8 @@ function NewPost() {
     e.preventDefault();
 
     const res = await postArticle(formState);
-
-    console.log(typeof res.data);
+    history.push(`/profile/${username}`);
+    // console.log(typeof res.data);
     // if (typeof res.data === undefined) {
     //   <Redirect to="/profile" />;
     // }
@@ -69,7 +73,7 @@ const NewPostContainer = styled.div`
   place-items: center;
   margin-top: 3rem;
   > input {
-    padding: 0.75rem 1.5rem;
+    padding: 1.25rem 1.5rem;
     border-radius: 0.3rem;
     border: 1px solid rgba(0, 0, 0, 0.15);
     margin-top: 10px;
@@ -80,7 +84,7 @@ const NewPostContainer = styled.div`
   }
   > button {
     display: inline-block;
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 1.75rem;
     font-size: 1rem;
     border-radius: 0.3rem;
     color: #fff;
@@ -96,7 +100,7 @@ const NewPostContainer = styled.div`
     border: 1px solid rgba(0, 0, 0, 0.15);
     margin-top: 10px;
     min-width: 60vw;
-    min-height: 15vh;
+    min-height: 20vh;
     ::placeholder {
       color: rgba(0, 0, 0, 0.55);
     }

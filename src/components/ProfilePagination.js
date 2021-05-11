@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 function ProfilePagination({ articlesCount, getPageArticles }) {
@@ -6,15 +6,23 @@ function ProfilePagination({ articlesCount, getPageArticles }) {
   for (let i = 1; i <= Math.ceil(articlesCount / 10); ++i) {
     NumberOfPages.push(i);
   }
-
+  const [isActive, setIsActive] = useState(1);
   const handlePages = async (page) => {
+    setIsActive(page);
     await getPageArticles(page);
   };
 
   return (
     <Container>
       {NumberOfPages.map((page) => (
-        <PagesBox key={page} onClick={() => handlePages(page)}>
+        <PagesBox
+          key={page}
+          onClick={() => handlePages(page)}
+          style={{
+            backgroundColor: isActive === page ? " #5cb85c" : "white",
+            color: isActive === page ? "white" : "black",
+          }}
+        >
           {page}
         </PagesBox>
       ))}
