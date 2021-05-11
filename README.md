@@ -1,5 +1,5 @@
 
-"Conduit" is a social blogging site (i.e. a Medium.com clone). It uses a custom API for all requests, including authentication. You can view a live demo over at https://demo.realworld.io
+"Conduit" is a social blogging site (i.e. a Medium.com clone). It uses a custom API for all requests, including authentication. 
 
 **General functionality:**
 
