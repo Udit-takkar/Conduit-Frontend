@@ -18,24 +18,27 @@ import { isUserLoggedIn } from "./features/authentication/signup";
 import Pagination from "./components/Pagination";
 
 function App() {
+  const dispatch = useDispatch();
   const isLoggedIn = useSelector(isUserLoggedIn);
   const getActiveItem = useSelector(activeItem);
+  const isLoading = useSelector(loading);
+  let NavItems = useSelector(navItems);
+
+  const articles = useSelector(getArticles);
+  const articlesCount = useSelector(getArticlesCount);
+
+  const [activeTab, setActiveTab] = useState({
+    getPageArticles: fetchGlobalArticles,
+  });
+
+  // Checks which tab to show depending if user has logged in or not
   const checkNav = (NavItem) => {
     if (isLoggedIn === false && NavItem === "Your Feed") {
       return false;
     } else return true;
   };
-  const [activeTab, setActiveTab] = useState({
-    getPageArticles: fetchGlobalArticles,
-  });
-  const dispatch = useDispatch();
 
-  const isLoading = useSelector(loading);
-  let NavItems = useSelector(navItems);
   NavItems = NavItems.filter(checkNav);
-
-  const articles = useSelector(getArticles);
-  const articlesCount = useSelector(getArticlesCount);
 
   useEffect(() => {
     const getInitalArticles = async () => {
@@ -75,12 +78,13 @@ function App() {
       </NavBar>
       <AppContainer>
         <ArticlesContainer>
+          {console.count()}
           {articlesCount === 0 && isLoading === false ? (
             <p>No articles are here... yet.</p>
           ) : (
             articles.map((article) => {
               const {
-                author: { username: username, image: image },
+                author: { username, image },
                 title,
                 description,
                 favoritesCount,
@@ -104,6 +108,8 @@ function App() {
         <Pagination
           articlesCount={articlesCount}
           getPageArticles={activeTab.getPageArticles}
+          tabName={getActiveItem}
+          Component="Home"
         />
       </AppContainer>
     </>

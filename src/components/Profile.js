@@ -8,9 +8,22 @@ import { useSelector } from "react-redux";
 import { myArticles } from "../api/myArticles";
 import { Favourite } from "../api/favouriteArticle";
 import { useHistory, useParams } from "react-router-dom";
-import ProfilePagination from "./ProfilePagination";
+import Pagination from "./Pagination";
 
 function Profile() {
+  const { username } = useParams();
+  const history = useHistory();
+
+  const LoggedInUsername = useSelector(getUsername);
+  console.log(LoggedInUsername, username);
+
+  const [articles, setArticles] = useState([]);
+  const [articlesCount, setArticlesCount] = useState(0);
+  const [activeTab, setActiveTab] = useState({
+    getArticles: fetchMyArticles,
+    tabName: "My Articles",
+  });
+
   const fetchMyArticles = async (page) => {
     const data = await myArticles(page, username);
     setArticles(data.articles);
@@ -28,16 +41,7 @@ function Profile() {
       tabName: "Favourite Articles",
     });
   };
-  const { username } = useParams();
-  const LoggedInUsername = useSelector(getUsername);
-  console.log(LoggedInUsername, username);
-  const history = useHistory();
-  const [articles, setArticles] = useState([]);
-  const [articlesCount, setArticlesCount] = useState(0);
-  const [activeTab, setActiveTab] = useState({
-    getArticles: fetchMyArticles,
-    tabName: "My Articles",
-  });
+
   useEffect(() => {
     fetchMyArticles(1);
   }, [username]);
@@ -71,7 +75,7 @@ function Profile() {
           ) : (
             articles.map((article) => {
               const {
-                author: { username: username, image: image },
+                author: { username, image },
                 title,
                 description,
                 createdAt,
@@ -93,9 +97,11 @@ function Profile() {
             })
           )}
         </ArticlesContainer>
-        <ProfilePagination
+        <Pagination
           articlesCount={articlesCount}
           getPageArticles={activeTab.getArticles}
+          tabName={activeTab.tabName}
+          Component="Profile"
         />
       </ProfileArticles>
     </>

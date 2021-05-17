@@ -1,24 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { navItems } from "../features/articles/articleSlice";
 import { fetchArticlesByTag } from "../features/articles/articleSlice";
 
-function Pagination({ articlesCount, getPageArticles }) {
+function Pagination({ articlesCount, getPageArticles, tabName, Component }) {
+  const [isActive, setIsActive] = useState(1);
   const dispatch = useDispatch();
+  useEffect(() => {
+    setIsActive(1);
+  }, [tabName]);
   const tabs = useSelector(navItems);
   const NumberOfPages = [];
-  const [isActive, setIsActive] = useState(1);
+
   for (let i = 1; i <= Math.ceil(articlesCount / 10); ++i) {
     NumberOfPages.push(i);
   }
   const handlePages = async (page) => {
     setIsActive(page);
-    if (tabs.length !== 3) {
-      await dispatch(getPageArticles(page));
+
+    if (Component === "Home") {
+      if (tabName === "Global Feed" || tabName === "Your Feed") {
+        await dispatch(getPageArticles(page));
+      } else {
+        await dispatch(fetchArticlesByTag({ page, tag: tabName }));
+      }
     } else {
-      console.log(tabs[2], page);
-      await dispatch(fetchArticlesByTag({ page, tag: tabs[2] }));
+      await getPageArticles(page);
     }
   };
   return (

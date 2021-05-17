@@ -150,8 +150,10 @@ export const articleSlice = createSlice({
     },
     [fetchArticlesByTag.fulfilled]: (state, action) => {
       let updateNavItems = state.navItems;
+
       if (state.navItems.length === 3) {
-        updateNavItems[2] = action.meta.arg.tag;
+        // check if a tag tab is already open
+        updateNavItems[2] = action.meta.arg.tag; //Just replace it with new tag
       } else {
         updateNavItems = [...updateNavItems, action.meta.arg.tag];
       }
