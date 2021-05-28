@@ -42,7 +42,7 @@ function SignUp() {
       ) : (
         <SignInContainer>
           <Header />
-          {checkError && <p>{checkError.message}</p>}
+
           <SignInForm>
             <h3>Sign Up</h3>
             <Link to="/signin" style={link}>
@@ -69,6 +69,19 @@ function SignUp() {
               type="password"
               placeholder="Password"
             />
+            {checkError && checkError.page === "signup" && (
+              <>
+                {Object.entries(checkError.error).map(([key, val]) => {
+                  return (
+                    <>
+                      <span style={{ color: "#ff0033", fontWeight: 500 }}>
+                        {key} {val}
+                      </span>
+                    </>
+                  );
+                })}
+              </>
+            )}
             <button disabled={isDisabled} type="submit" onClick={handleSubmit}>
               Sign Up
             </button>

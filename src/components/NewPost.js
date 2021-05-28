@@ -16,6 +16,7 @@ function NewPost() {
     tagList: [],
   });
   const [tags, setTags] = useState("");
+  const [err, setErr] = useState([]);
   const handleChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
@@ -23,7 +24,13 @@ function NewPost() {
     e.preventDefault();
 
     const res = await postArticle(formState);
-    history.push(`/profile/${username}`);
+    console.log(res);
+    if (res.article !== undefined) {
+      history.push(`/profile/${username}`);
+    } else {
+      setErr(res.data.errors);
+    }
+
     // console.log(typeof res.data);
     // if (typeof res.data === undefined) {
     //   <Redirect to="/profile" />;
@@ -38,6 +45,16 @@ function NewPost() {
     <>
       <Header />
       <NewPostContainer>
+        {err !== []
+          ? Object.entries(err).map(([key, value]) => {
+              return (
+                <Error>
+                  <span className="key">{key}</span> : {value}
+                  <br />
+                </Error>
+              );
+            })
+          : null}
         <input
           onChange={handleChange}
           value={formState.title}
@@ -104,6 +121,14 @@ const NewPostContainer = styled.div`
     ::placeholder {
       color: rgba(0, 0, 0, 0.55);
     }
+  }
+`;
+
+const Error = styled.div`
+  color: #ff0033;
+  font-weight: 500;
+  > span {
+    text-transform: uppercase;
   }
 `;
 

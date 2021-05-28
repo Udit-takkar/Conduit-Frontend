@@ -12,6 +12,7 @@ import { deleteArticle } from "../api/DeleteArticle";
 import { useHistory } from "react-router-dom";
 import { postComment } from "../api/PostComment";
 import Loader from "react-loader-spinner";
+import ReactMarkdown from "react-markdown";
 
 function ArticleDisplay() {
   const history = useHistory();
@@ -140,7 +141,8 @@ function ArticleDisplay() {
             style={{ marginTop: "50px" }}
           />
         ) : (
-          <ArticleBody>{article.body}</ArticleBody>
+          <ReactMarkdown children={article.body} />
+          // <ArticleBody>{article.body}</ArticleBody>
         )}
       </Body>
       <ColoredLine color="gray" />

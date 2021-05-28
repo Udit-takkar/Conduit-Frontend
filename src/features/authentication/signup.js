@@ -99,7 +99,7 @@ export const SignUpSlice = createSlice({
       console.log(action);
       Object.assign(state, {
         loading: false,
-        error: action.payload,
+        error: { page: "signup", error: action.payload.data.errors },
         isLoggedIn: false,
         username: "",
         email: "",
@@ -131,9 +131,10 @@ export const SignUpSlice = createSlice({
       });
     },
     [login.rejected]: (state, action) => {
+      console.log(action);
       Object.assign(state, {
         loading: false,
-        error: action.payload,
+        error: { page: "signin", error: action.payload.data.errors },
         isLoggedIn: false,
         username: "",
         email: "",
@@ -169,7 +170,7 @@ export const SignUpSlice = createSlice({
       console.log(action);
       Object.assign(state, {
         loading: false,
-        error: action.payload,
+        error: { page: "update", error: action.payload.data.errors },
         isLoggedIn: false,
         username: "",
         email: "",

@@ -17,13 +17,15 @@ function SignIn() {
     password: "",
   });
   const isLoggedIn = useSelector(isUserLoggedIn);
+  const err = useSelector(error);
   const handleChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
-  const handleSubmit = (e) => {
+  // const [err, setErr] = useState(null);
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("clicked");
-    dispatch(login(formState));
+
+    const res = await dispatch(login(formState));
   };
 
   return (
@@ -52,6 +54,19 @@ function SignIn() {
               type="password"
               placeholder="Password"
             />
+            {err && err.page === "signin" && (
+              <>
+                {Object.entries(err).map(([key, val]) => {
+                  return (
+                    <>
+                      <span style={{ color: "#ff0033", fontWeight: 500 }}>
+                        {key} {val}
+                      </span>
+                    </>
+                  );
+                })}
+              </>
+            )}
             <button onChange={handleChange} onClick={handleSubmit}>
               Sign In
             </button>

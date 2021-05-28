@@ -24,6 +24,7 @@ export const postArticle = async ({ title, description, body, tagList }) => {
     );
     return res.data;
   } catch (err) {
+    console.log(err.response);
     return err.response;
   }
 };
