@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import styled from "styled-components";
 import { login } from "../features/authentication/signup";
@@ -9,15 +9,19 @@ import {
   isUserLoggedIn,
   error,
 } from "../features/authentication/signup";
+import Loader from "react-loader-spinner";
+import { useHistory } from "react-router-dom";
 
 function SignIn() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [formState, setFormState] = useState({
     email: "",
     password: "",
   });
   const isLoggedIn = useSelector(isUserLoggedIn);
   const err = useSelector(error);
+  const loading = useSelector(isLoading);
   const handleChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
@@ -28,51 +32,64 @@ function SignIn() {
     const res = await dispatch(login(formState));
   };
 
+  useEffect(() => {
+    if (isLoggedIn === true) history.push("/");
+  });
+
   return (
     <>
-      {isLoggedIn ? (
-        <Redirect to="/" />
-      ) : (
-        <SignInContainer>
-          <Header />
-          <SignInForm>
-            <h3>SIGN IN</h3>
-            <Link to="/signup" style={needaccount}>
-              Need a account
-            </Link>
-            <input
-              name="email"
-              onChange={handleChange}
-              value={formState.email}
-              type="email"
-              placeholder="Email"
-            />
-            <input
-              name="password"
-              onChange={handleChange}
-              value={formState.password}
-              type="password"
-              placeholder="Password"
-            />
-            {err && err.page === "signin" && (
-              <>
-                {Object.entries(err).map(([key, val]) => {
-                  return (
-                    <>
-                      <span style={{ color: "#ff0033", fontWeight: 500 }}>
-                        {key} {val}
-                      </span>
-                    </>
-                  );
-                })}
-              </>
+      <SignInContainer>
+        <Header />
+        <SignInForm>
+          <LoadingSpin>
+            {loading === true && (
+              <Loader
+                type="TailSpin"
+                color="#5cb85c"
+                height={50}
+                width={50}
+                style={{ marginTop: "50px" }}
+              />
             )}
-            <button onChange={handleChange} onClick={handleSubmit}>
-              Sign In
-            </button>
-          </SignInForm>
-        </SignInContainer>
-      )}
+          </LoadingSpin>
+
+          <h3>SIGN IN</h3>
+          <Link to="/signup" style={needaccount}>
+            Need a account
+          </Link>
+          <input
+            name="email"
+            onChange={handleChange}
+            value={formState.email}
+            type="email"
+            placeholder="Email"
+          />
+          <input
+            name="password"
+            onChange={handleChange}
+            value={formState.password}
+            type="password"
+            placeholder="Password"
+          />
+          {err && err.page === "signin" && (
+            <>
+              {Object.entries(err.error).map(([key, val]) => {
+                return (
+                  <>
+                    <span style={{ color: "#ff0033", fontWeight: 500 }}>
+                      {key} {val}
+                    </span>
+                  </>
+                );
+              })}
+            </>
+          )}
+          <button onChange={handleChange} onClick={handleSubmit}>
+            Sign In
+          </button>
+        </SignInForm>
+      </SignInContainer>
+      }
     </>
   );
 }
@@ -114,4 +131,8 @@ const needaccount = {
   fontSize: "15px ",
   color: "#5cb85c",
 };
+
+const LoadingSpin = styled.div`
+  position: absolute;
+`;
 export default SignIn;

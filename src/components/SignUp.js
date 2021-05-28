@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Header from "./Header";
 import styled from "styled-components";
 import { Link, Redirect } from "react-router-dom";
@@ -9,41 +9,60 @@ import {
   isUserLoggedIn,
   error,
 } from "../features/authentication/signup";
+import Loader from "react-loader-spinner";
+import { useHistory } from "react-router-dom";
 
 function SignUp() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [formState, setFormState] = useState({
     username: "",
     email: "",
     password: "",
   });
+  let btnRef = useRef();
+
   const [isDisabled, setIsDisabled] = useState(false);
-  const Loading = useSelector(isLoading);
+  const loading = useSelector(isLoading);
   const isLoggedIn = useSelector(isUserLoggedIn);
   const checkError = useSelector(error);
+
+  useEffect(() => {
+    if (isLoggedIn === true) {
+      history.push("/");
+    }
+  });
 
   const handleChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsDisabled((state) => {
-      return true;
-    });
+    if (btnRef.current) {
+      btnRef.current.setAttribute("disabled", "disabled");
+    }
     await dispatch(signup(formState));
-    setIsDisabled((state) => {
-      return false;
-    });
+    btnRef.current.removeAttribute("disabled");
   };
   return (
     <>
-      {isLoggedIn ? (
-        <Redirect to="/" />
-      ) : (
+      {
         <SignInContainer>
           <Header />
 
           <SignInForm>
+            <LoadingSpin>
+              {loading === true && (
+                <Loader
+                  type="TailSpin"
+                  color="#5cb85c"
+                  height={50}
+                  width={50}
+                  style={{ marginTop: "50px" }}
+                />
+              )}
+            </LoadingSpin>
+
             <h3>Sign Up</h3>
             <Link to="/signin" style={link}>
               Have an account?
@@ -82,12 +101,12 @@ function SignUp() {
                 })}
               </>
             )}
-            <button disabled={isDisabled} type="submit" onClick={handleSubmit}>
+            <button ref={btnRef} type="submit" onClick={handleSubmit}>
               Sign Up
             </button>
           </SignInForm>
         </SignInContainer>
-      )}
+      }
     </>
   );
 }
@@ -122,7 +141,14 @@ const SignInForm = styled.div`
     :hover {
       cursor: pointer;
     }
+    &:disabled {
+      background-color: #5cb85b;
+      cursor: not-allowed;
+    }
   }
+`;
+const LoadingSpin = styled.div`
+  position: absolute;
 `;
 const link = {
   textDecoration: "none",

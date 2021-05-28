@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import styled from "styled-components";
 import { postArticle } from "../api/postArticle";
 import { Redirect, useHistory } from "react-router-dom";
 import { getUsername } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { updateArticle } from "../api/updateArticle";
 
 function NewPost() {
   const username = useSelector(getUsername);
+  const location = useLocation();
   const history = useHistory();
   const [formState, setFormState] = useState({
     title: "",
@@ -17,24 +20,38 @@ function NewPost() {
   });
   const [tags, setTags] = useState("");
   const [err, setErr] = useState([]);
+  useEffect(() => {
+    if (location.state !== undefined) {
+      setFormState({
+        title: location.state.title,
+        description: location.state.description,
+        body: location.state.body,
+        tagList: location.state.tagList,
+      });
+    }
+    console.log(location);
+  }, []);
+
   const handleChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Check If We have to update the article
 
-    const res = await postArticle(formState);
-    console.log(res);
-    if (res.article !== undefined) {
-      history.push(`/profile/${username}`);
+    if (location.state !== undefined) {
+      const res = await updateArticle(location.state.slug, formState);
+      // console.log(res);
+      history.push(`/articles/${res.article.slug}`);
     } else {
-      setErr(res.data.errors);
+      const res = await postArticle(formState);
+      console.log(res);
+      if (res.article !== undefined) {
+        history.push(`/profile/${username}`);
+      } else {
+        setErr(res.data.errors);
+      }
     }
-
-    // console.log(typeof res.data);
-    // if (typeof res.data === undefined) {
-    //   <Redirect to="/profile" />;
-    // }
   };
   const handleTags = (e) => {
     setTags(e.target.value);
@@ -79,7 +96,13 @@ function NewPost() {
           placeholder="Enter Tags"
           name="tags"
         />
-        <button onClick={handleSubmit}>Publish Article</button>
+        <button onClick={handleSubmit}>
+          {location.state !== undefined ? (
+            <span>Update Article</span>
+          ) : (
+            <span>Publish Article</span>
+          )}
+        </button>
       </NewPostContainer>
     </>
   );

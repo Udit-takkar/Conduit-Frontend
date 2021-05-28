@@ -106,7 +106,7 @@ function ArticleDisplay() {
           />
         ) : (
           <>
-            <h2>{article.title}</h2>
+            <h2 className={author}>{article.title}</h2>
             <Author>
               <img src={article.image} alt="avatar" />
               <div>
@@ -115,7 +115,20 @@ function ArticleDisplay() {
               </div>
               {isLoggedIn && article.username === username ? (
                 <>
-                  <button>
+                  <button
+                    onClick={() =>
+                      history.push({
+                        pathname: "/newpost",
+                        state: {
+                          title: article.title,
+                          description: article.description,
+                          body: article.body,
+                          tagList: article.tagList,
+                          slug,
+                        },
+                      })
+                    }
+                  >
                     <FontAwesomeIcon icon={faEdit} /> Edit Article
                   </button>
                   <button
@@ -252,4 +265,7 @@ const Author = styled.div`
     max-height: fit-content;
   }
 `;
+const author = {
+  cursor: "pointer",
+};
 export default ArticleDisplay;
