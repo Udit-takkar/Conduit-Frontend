@@ -69,16 +69,17 @@ const SignInForm = styled.div`
   align-items: center;
   margin-top: 4rem;
   > h3 {
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.1;
-    font-size: 35px;
+    font-size: 45px;
   }
   > input {
     padding: 1.25rem 1.5rem;
     border-radius: 0.3rem;
     border: 1px solid rgba(0, 0, 0, 0.15);
     margin-top: 10px;
-    min-width: 40vw;
+    min-width: 30vw;
+    font-size: 1.05em;
   }
   > button {
     display: inline-block;

@@ -19,7 +19,7 @@ export const postComment = async (slug, body) => {
         },
       }
     );
-    console.log(res.data);
+    console.log(res);
     return res.data;
   } catch (err) {
     return err.response;

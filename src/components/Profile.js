@@ -9,6 +9,8 @@ import { myArticles } from "../api/myArticles";
 import { Favourite } from "../api/favouriteArticle";
 import { useHistory, useParams } from "react-router-dom";
 import Pagination from "./Pagination";
+import Skeleton from "react-loading-skeleton";
+import Loader from "react-loader-spinner";
 
 function Profile() {
   const { username } = useParams();
@@ -17,19 +19,21 @@ function Profile() {
   const LoggedInUsername = useSelector(getUsername);
   console.log(LoggedInUsername, username);
 
+  const fetchMyArticles = async (page) => {
+    const data = await myArticles(page, username);
+    setArticles(data.articles);
+    setArticlesCount(data.articlesCount);
+    setActiveTab({ getArticles: fetchMyArticles, tabName: "My Articles" });
+    setLoading(false);
+  };
+
   const [articles, setArticles] = useState([]);
   const [articlesCount, setArticlesCount] = useState(0);
   const [activeTab, setActiveTab] = useState({
     getArticles: fetchMyArticles,
     tabName: "My Articles",
   });
-
-  const fetchMyArticles = async (page) => {
-    const data = await myArticles(page, username);
-    setArticles(data.articles);
-    setArticlesCount(data.articlesCount);
-    setActiveTab({ getArticles: fetchMyArticles, tabName: "My Articles" });
-  };
+  const [isLoading, setLoading] = useState(true);
 
   const fetchFavouriteArticles = async (page) => {
     const data = await Favourite(page, username);
@@ -40,6 +44,7 @@ function Profile() {
       getArticles: fetchFavouriteArticles,
       tabName: "Favourite Articles",
     });
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -71,8 +76,21 @@ function Profile() {
         </NavBar>
         <ArticlesContainer>
           {articlesCount === 0 ? (
-            <p>No articles are here... yet.</p>
+            <>
+              {isLoading === true ? (
+                <Loader
+                  type="TailSpin"
+                  color="#5cb85c"
+                  height={80}
+                  width={80}
+                  style={{ marginTop: "50px" }}
+                />
+              ) : (
+                <p>No articles are here... yet.</p>
+              )}
+            </>
           ) : (
+            // <Skeleton height={50} width={830} />
             articles.map((article) => {
               const {
                 author: { username, image },

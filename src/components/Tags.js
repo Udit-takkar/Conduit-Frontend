@@ -4,40 +4,43 @@ import uuid from "react-uuid";
 import styled from "styled-components";
 import { fetchArticlesByTag } from "../features/articles/articleSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { getTags } from "../api/Tags";
 require("dotenv").config();
 
 function Tags() {
   const [tags, setTags] = useState([]);
   const dispatch = useDispatch();
+  const [isLoading, setLoading] = useState(false);
   useEffect(() => {
-    const URL = "https://conduit.productionready.io/api/tags";
-
-    axios
-      .get(URL, {
-        headers: {
-          accepts: "application/json",
-        },
-      })
-      .then((res) => {
-        setTags(res.data.tags);
-      })
-      .catch((err) => console.log(err));
+    const fetchTage = async () => {
+      const res = await getTags();
+      // console.log(res);
+      if (res.tags) {
+        setTags(res.tags);
+      }
+      setLoading(false);
+    };
+    setLoading(true, fetchTage());
   }, []);
   return (
     <TagContainer>
       <p>Popular Tags</p>
-      {tags.map((tag) => {
-        return (
-          <TagsList
-            onClick={() => {
-              dispatch(fetchArticlesByTag({ page: 1, tag }));
-            }}
-            key={uuid()}
-          >
-            {tag}
-          </TagsList>
-        );
-      })}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        tags.map((tag) => {
+          return (
+            <TagsList
+              onClick={() => {
+                dispatch(fetchArticlesByTag({ page: 1, tag }));
+              }}
+              key={uuid()}
+            >
+              {tag}
+            </TagsList>
+          );
+        })
+      )}
     </TagContainer>
   );
 }

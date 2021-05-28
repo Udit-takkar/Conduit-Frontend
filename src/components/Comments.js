@@ -29,7 +29,7 @@ function Comments({ slug, Loading }) {
     <CommentContainer>
       {comments.map((comment) => {
         const {
-          author: { username: username, image: image },
+          author: { username, image },
           body,
           id,
           createdAt,

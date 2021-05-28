@@ -9,6 +9,7 @@ import { MarkUnFavourite } from "../api/MarkUnFavorite";
 import { isFavourite } from "../api/IsFavourite";
 import { isUserLoggedIn } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
+import Skeleton from "react-loading-skeleton";
 
 function ArticleCard({
   username,
@@ -32,7 +33,6 @@ function ArticleCard({
 
   useEffect(() => {
     const intializeState = async () => {
-      console.log(isLoggedIn);
       if (isLoggedIn === true) {
         const checkFavorite = await isFavourite(slug);
         // console.log(checkFavorite);
@@ -46,17 +46,29 @@ function ArticleCard({
   }, []);
 
   const handlefavorite = async (slug) => {
+    const checkLike = async () => {
+      if (isLoggedIn === true) {
+        // const checkFavorite = await isFavourite(slug);
+        if (isactive === true) {
+          const unFavorite = await MarkUnFavourite(slug);
+          console.log(unFavorite);
+          setFavorites(unFavorite.article.favoritesCount);
+          setIsactive(false);
+        } else {
+          const data = await MarkFavourite(slug);
+          setFavorites(data.article.favoritesCount);
+          setIsactive(true);
+        }
+      }
+    };
+
     if (isLoggedIn === true) {
-      // const checkFavorite = await isFavourite(slug);
-      if (isactive === true) {
-        const unFavorite = await MarkUnFavourite(slug);
-        console.log(unFavorite);
-        setFavorites(unFavorite.article.favoritesCount);
-        setIsactive(false);
+      if (isactive === false) {
+        setFavorites((favoritesCount) => favoritesCount + 1);
+        setIsactive(true, checkLike());
       } else {
-        const data = await MarkFavourite(slug);
-        setFavorites(data.article.favoritesCount);
-        setIsactive(true);
+        setFavorites((favoritesCount) => favoritesCount - 1);
+        setIsactive(false, checkLike());
       }
     }
   };

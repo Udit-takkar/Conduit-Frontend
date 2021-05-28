@@ -11,11 +11,13 @@ import { useSelector } from "react-redux";
 import { deleteArticle } from "../api/DeleteArticle";
 import { useHistory } from "react-router-dom";
 import { postComment } from "../api/PostComment";
+import Loader from "react-loader-spinner";
 
 function ArticleDisplay() {
   const history = useHistory();
   const isLoggedIn = useSelector(isUserLoggedIn);
   const username = useSelector(getUsername);
+  const [isLoading, setLoading] = useState(true);
 
   const ColoredLine = ({ color }) => (
     <hr
@@ -69,6 +71,7 @@ function ArticleDisplay() {
         createdAt,
         tagList,
       });
+      setLoading(false);
     };
     getArticle();
   }, []);
@@ -76,7 +79,9 @@ function ArticleDisplay() {
   const sendComment = async () => {
     setComment({ ...comment, Loading: true });
     const res = await postComment(slug, comment.comment);
-
+    if (res.status === 401) {
+      history.push("/signin");
+    }
     if (res.comment) {
       setComment({ comment: "", Loading: false });
     }
@@ -90,34 +95,53 @@ function ArticleDisplay() {
     <>
       <Header />
       <ArticleBanner>
-        <h2>{article.title}</h2>
-        <Author>
-          <img src={article.image} alt="avatar" />
-          <div>
-            <h4>{article.username}</h4>
-            <p>{article.createdAt}</p>
-          </div>
-          {isLoggedIn && article.username === username ? (
-            <>
-              {" "}
-              <button>
-                {" "}
-                <FontAwesomeIcon icon={faEdit} /> Edit Article
-              </button>
-              <button
-                onClick={handleDelete}
-                style={{ borderColor: "#b85c5c", color: "#b85c5c" }}
-              >
-                {" "}
-                <FontAwesomeIcon icon={faTrashAlt} />
-                Delete Article
-              </button>
-            </>
-          ) : null}
-        </Author>
+        {isLoading === true ? (
+          <Loader
+            type="TailSpin"
+            color="#fff"
+            height={30}
+            width={30}
+            style={{ marginTop: "50px" }}
+          />
+        ) : (
+          <>
+            <h2>{article.title}</h2>
+            <Author>
+              <img src={article.image} alt="avatar" />
+              <div>
+                <h4>{article.username}</h4>
+                <p>{article.createdAt}</p>
+              </div>
+              {isLoggedIn && article.username === username ? (
+                <>
+                  <button>
+                    <FontAwesomeIcon icon={faEdit} /> Edit Article
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    style={{ borderColor: "#b85c5c", color: "#b85c5c" }}
+                  >
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                    Delete Article
+                  </button>
+                </>
+              ) : null}
+            </Author>
+          </>
+        )}
       </ArticleBanner>
       <Body>
-        <ArticleBody>{article.body}</ArticleBody>
+        {isLoading === true ? (
+          <Loader
+            type="TailSpin"
+            color="#5cb85c"
+            height={80}
+            width={80}
+            style={{ marginTop: "50px" }}
+          />
+        ) : (
+          <ArticleBody>{article.body}</ArticleBody>
+        )}
       </Body>
       <ColoredLine color="gray" />
       <CommentBox>

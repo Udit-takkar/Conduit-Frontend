@@ -16,6 +16,9 @@ import { useDispatch, useSelector } from "react-redux";
 import uuid from "react-uuid";
 import { isUserLoggedIn } from "./features/authentication/signup";
 import Pagination from "./components/Pagination";
+import Skeleton from "react-loading-skeleton";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
 
 function App() {
   const dispatch = useDispatch();
@@ -78,31 +81,45 @@ function App() {
       </NavBar>
       <AppContainer>
         <ArticlesContainer>
-          {console.count()}
-          {articlesCount === 0 && isLoading === false ? (
-            <p>No articles are here... yet.</p>
-          ) : (
-            articles.map((article) => {
-              const {
-                author: { username, image },
-                title,
-                description,
-                favoritesCount,
-                createdAt,
-              } = article;
-              return (
-                <ArticleCard
-                  key={article.slug}
-                  username={username}
-                  image={image}
-                  title={title}
-                  description={description}
-                  createdAt={createdAt}
-                  favoritesCount={favoritesCount}
-                  slug={article.slug}
+          {/* {console.count()} */}
+          {articlesCount === 0 ? (
+            <>
+              {isLoading === true ? (
+                <Loader
+                  type="TailSpin"
+                  color="#5cb85c"
+                  height={80}
+                  width={80}
+                  style={{ marginTop: "50px" }}
                 />
-              );
-            })
+              ) : (
+                <p>No articles are here... yet.</p>
+              )}
+            </>
+          ) : (
+            <>
+              {articles.map((article) => {
+                const {
+                  author: { username, image },
+                  title,
+                  description,
+                  favoritesCount,
+                  createdAt,
+                } = article;
+                return (
+                  <ArticleCard
+                    key={article.slug}
+                    username={username}
+                    image={image}
+                    title={title}
+                    description={description}
+                    createdAt={createdAt}
+                    favoritesCount={favoritesCount}
+                    slug={article.slug}
+                  />
+                );
+              })}
+            </>
           )}
         </ArticlesContainer>
         <Pagination
@@ -140,5 +157,9 @@ const NavBar = styled.div`
     color: green;
   }
 `;
-const ArticlesContainer = styled.div``;
+const ArticlesContainer = styled.div`
+  > p {
+    margin-top: 130px;
+  }
+`;
 export default App;
