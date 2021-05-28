@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Header from "./Header";
 import ProfileBanner from "./ProfileBanner";
 import ArticleCard from "./ArticleCard";
 import { getUsername } from "../features/authentication/signup";
@@ -53,7 +52,6 @@ function Profile() {
 
   return (
     <>
-      <Header />
       <ProfileBanner username={username} LoggedInUsername={LoggedInUsername} />
       <ProfileArticles>
         <NavBar>

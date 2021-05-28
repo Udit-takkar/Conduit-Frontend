@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Header from "./Header";
+
 import styled from "styled-components";
 import { Link, Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,8 +48,6 @@ function SignUp() {
     <>
       {
         <SignInContainer>
-          <Header />
-
           <SignInForm>
             <LoadingSpin>
               {loading === true && (

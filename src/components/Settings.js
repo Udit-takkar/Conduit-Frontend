@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Header from "./Header";
 import {
   getUsername,
   getUserEmail,
@@ -54,7 +53,6 @@ function Settings() {
   };
   return (
     <>
-      <Header />
       <SettingsContainer>
         <h3>Your Settings</h3>
         <input

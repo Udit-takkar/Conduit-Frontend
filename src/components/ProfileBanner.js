@@ -4,6 +4,7 @@ import {
   getUsername,
   getUserBio,
   getUserImg,
+  isUserLoggedIn,
 } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
 import {
@@ -22,6 +23,7 @@ function ProfileBanner({ username, LoggedInUsername }) {
   const bio = useSelector(getUserBio);
   const [isFollowing, setIsFollowing] = useState(false);
   const history = useHistory();
+  const isLoggedIn = useSelector(isUserLoggedIn);
   const image =
     useSelector(getUserImg) ||
     "https://static.productionready.io/images/smiley-cyrus.jpg";
@@ -40,8 +42,12 @@ function ProfileBanner({ username, LoggedInUsername }) {
   }, []);
 
   const followUser = async () => {
-    const profile = await Follow(username);
-    setIsFollowing(profile.profile.following);
+    if (isLoggedIn === true) {
+      const profile = await Follow(username);
+      setIsFollowing(profile.profile.following);
+    } else {
+      history.push("/signin");
+    }
   };
   const UnfollowUser = async () => {
     const profile = await UnFollow(username);
@@ -64,7 +70,7 @@ function ProfileBanner({ username, LoggedInUsername }) {
         <button onClick={goToSettings}>
           <span>
             <FontAwesomeIcon icon={faCog} />
-          </span>{" "}
+          </span>
           <span> Edit Profile Settings</span>
         </button>
       )}

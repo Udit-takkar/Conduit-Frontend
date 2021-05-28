@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Header from "./Header";
 import styled from "styled-components";
 import { postArticle } from "../api/postArticle";
 import { Redirect, useHistory } from "react-router-dom";
@@ -60,7 +59,6 @@ function NewPost() {
   };
   return (
     <>
-      <Header />
       <NewPostContainer>
         {err !== []
           ? Object.entries(err).map(([key, value]) => {

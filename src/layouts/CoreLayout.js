@@ -11,7 +11,6 @@ function CoreLayout({ children }) {
   const isLoggedIn = useSelector(isUserLoggedIn);
   return (
     <MainContainer>
-      <Header />
       {isLoggedIn === false && <Banner />}
       <FeedAndTagContainer>
         <div>

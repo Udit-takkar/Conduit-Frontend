@@ -7,32 +7,37 @@ import Settings from "./components/Settings";
 import NewPost from "./components/NewPost";
 import Profile from "./components/Profile";
 import ArticleDisplay from "./components/ArticleDisplay";
+import PrivateRoute from "./PrivateRoute";
+import Header from "./components/Header";
 
 function Routes() {
   return (
-    <Switch>
-      <Route exact path="/">
-        <CoreLayout />
-      </Route>
-      <Route exact path="/signin">
-        <SignIn />
-      </Route>
-      <Route exact path="/signup">
-        <SignUp />
-      </Route>
-      <Route exact path="/settings">
-        <Settings />
-      </Route>
-      <Route exact path="/newpost">
-        <NewPost />
-      </Route>
-      <Route exact path="/profile/:username">
-        <Profile />
-      </Route>
-      <Route path="/articles/:slug">
-        <ArticleDisplay />
-      </Route>
-    </Switch>
+    <>
+      <Header />
+      <Switch>
+        <Route exact path="/">
+          <CoreLayout />
+        </Route>
+        <Route exact path="/signin">
+          <SignIn />
+        </Route>
+        <Route exact path="/signup">
+          <SignUp />
+        </Route>
+        <PrivateRoute path="/settings">
+          <Settings />
+        </PrivateRoute>
+        <PrivateRoute exact path="/newpost">
+          <NewPost />
+        </PrivateRoute>
+        <Route exact path="/profile/:username">
+          <Profile />
+        </Route>
+        <Route path="/articles/:slug">
+          <ArticleDisplay />
+        </Route>
+      </Switch>
+    </>
   );
 }
 

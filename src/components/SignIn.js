@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Header from "./Header";
 import styled from "styled-components";
 import { login } from "../features/authentication/signup";
 import { Link, Redirect } from "react-router-dom";
@@ -39,7 +38,6 @@ function SignIn() {
   return (
     <>
       <SignInContainer>
-        <Header />
         <SignInForm>
           <LoadingSpin>
             {loading === true && (

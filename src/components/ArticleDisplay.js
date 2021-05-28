@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { getArticleBySlug } from "../api/ArticleByslug";
@@ -55,7 +54,7 @@ function ArticleDisplay() {
     const getArticle = async () => {
       const data = await getArticleBySlug(slug);
       const {
-        author: { username: username, image: image },
+        author: { username, image },
         createdAt,
         body,
         title,
@@ -94,7 +93,6 @@ function ArticleDisplay() {
   };
   return (
     <>
-      <Header />
       <ArticleBanner>
         {isLoading === true ? (
           <Loader
@@ -106,11 +104,16 @@ function ArticleDisplay() {
           />
         ) : (
           <>
-            <h2 className={author}>{article.title}</h2>
+            <h2>{article.title}</h2>
             <Author>
               <img src={article.image} alt="avatar" />
               <div>
-                <h4>{article.username}</h4>
+                <h4
+                  onClick={() => history.push(`/profile/${article.username}`)}
+                  style={author}
+                >
+                  {article.username}
+                </h4>
                 <p>{article.createdAt}</p>
               </div>
               {isLoggedIn && article.username === username ? (
@@ -267,5 +270,6 @@ const Author = styled.div`
 `;
 const author = {
   cursor: "pointer",
+  color: "#5cb85c",
 };
 export default ArticleDisplay;
