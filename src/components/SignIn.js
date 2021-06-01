@@ -10,6 +10,9 @@ import {
 } from "../features/authentication/signup";
 import Loader from "react-loader-spinner";
 import { useHistory } from "react-router-dom";
+import SignInIllustration from "../assets/auth_green.svg";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function SignIn() {
   const dispatch = useDispatch();
@@ -37,69 +40,93 @@ function SignIn() {
 
   return (
     <>
-      <SignInContainer>
-        <SignInForm>
-          <LoadingSpin>
-            {loading === true && (
-              <Loader
-                type="TailSpin"
-                color="#5cb85c"
-                height={50}
-                width={50}
-                style={{ marginTop: "50px" }}
-              />
-            )}
-          </LoadingSpin>
+      <PageContainer>
+        <LeftContainer>
+          <img style={signin} src={SignInIllustration} alt="Sign In" />
+        </LeftContainer>
+        <SignInContainer>
+          <SignInForm>
+            <LoadingSpin>
+              {loading === true && (
+                <Loader
+                  type="TailSpin"
+                  color="#5cb85c"
+                  height={50}
+                  width={50}
+                  style={{ marginTop: "50px" }}
+                />
+              )}
+            </LoadingSpin>
 
-          <h3>SIGN IN</h3>
-          <Link to="/signup" style={needaccount}>
-            Need a account
-          </Link>
-          <input
-            name="email"
-            onChange={handleChange}
-            value={formState.email}
-            type="email"
-            placeholder="Email"
-          />
-          <input
-            name="password"
-            onChange={handleChange}
-            value={formState.password}
-            type="password"
-            placeholder="Password"
-          />
-          {err && err.page === "signin" && (
-            <>
-              {Object.entries(err.error).map(([key, val]) => {
-                return (
-                  <>
-                    <span style={{ color: "#ff0033", fontWeight: 500 }}>
-                      {key} {val}
-                    </span>
-                  </>
-                );
-              })}
-            </>
-          )}
-          <button onChange={handleChange} onClick={handleSubmit}>
-            Sign In
-          </button>
-        </SignInForm>
-      </SignInContainer>
-      }
+            <h3>Log Into Condult</h3>
+            <Link to="/signup" style={needaccount}>
+              Need a account
+            </Link>
+
+            <input
+              name="email"
+              onChange={handleChange}
+              value={formState.email}
+              type="email"
+              placeholder="Email"
+            />
+
+            <input
+              name="password"
+              onChange={handleChange}
+              value={formState.password}
+              type="password"
+              placeholder="Password"
+            />
+            {err && err.page === "signin" && (
+              <>
+                {Object.entries(err.error).map(([key, val]) => {
+                  return (
+                    <>
+                      <span style={{ color: "#ff0033", fontWeight: 500 }}>
+                        {key} {val}
+                      </span>
+                    </>
+                  );
+                })}
+              </>
+            )}
+            <button onChange={handleChange} onClick={handleSubmit}>
+              Sign In
+            </button>
+          </SignInForm>
+        </SignInContainer>
+      </PageContainer>
     </>
   );
 }
-const SignInContainer = styled.div``;
+
+const PageContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  height: calc(100vh - 70px);
+`;
+const SignInContainer = styled.div`
+  flex: 1;
+`;
+const LeftContainer = styled.div`
+  display: flex;
+  place-items: center;
+  height: 100%;
+  width: 50vw;
+  background-color: #5cb85c;
+`;
+
 const SignInForm = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 4rem;
+
   > h3 {
-    font-weight: 400;
+    font-weight: 700;
     line-height: 1.1;
     font-size: 45px;
   }
@@ -122,6 +149,7 @@ const SignInForm = styled.div`
     border: none;
     margin-top: 15px;
     cursor: pointer;
+    width: 465px;
   }
 `;
 const needaccount = {
@@ -133,4 +161,9 @@ const needaccount = {
 const LoadingSpin = styled.div`
   position: absolute;
 `;
+
+const signin = {
+  maxWidth: "500px",
+  maxHeight: "600px",
+};
 export default SignIn;

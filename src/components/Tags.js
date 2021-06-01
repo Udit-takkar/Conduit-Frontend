@@ -11,16 +11,18 @@ function Tags() {
   const [tags, setTags] = useState([]);
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
+
   useEffect(() => {
-    const fetchTage = async () => {
-      const res = await getTags();
-      // console.log(res);
-      if (res.tags) {
-        setTags(res.tags);
+    const fetchTags = async () => {
+      try {
+        const res = await getTags();
+        setTags(res.tags.splice(10));
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
       }
-      setLoading(false);
     };
-    setLoading(true, fetchTage());
+    setLoading(true, fetchTags());
   }, []);
   return (
     <TagContainer>
@@ -48,23 +50,26 @@ const TagsList = styled.div`
   display: flex;
   flex-wrap: wrap;
   display: inline-block;
-  background-color: #818a91;
-  color: #fff !important;
-  font-size: 0.8rem;
-  padding-top: 0.1rem;
-  padding-bottom: 0.1rem;
+  // background-color: #818a91;
+  // background: #333;
+
+  color: rgba(117, 117, 117, 1) !important;
+  font-size: 0.7em;
+  padding: 0.6em;
+  border: 1px solid rgba(230, 230, 230, 1);
   white-space: nowrap;
   margin-right: 3px;
-  margin-bottom: 0.2rem;
-  border-radius: 10rem;
-  padding-right: 0.6em;
-  padding-left: 0.6em;
+  margin-bottom: 0.5rem;
+
   cursor: pointer;
+  > p {
+    text-align: center;
+  }
 `;
 const TagContainer = styled.div`
   max-width: 200px;
   padding: 0.5rem;
-  background: #f3f3f3;
+  // background: #f3f3f3;
   margin-top: 1.5rem;
   max-height: fit-content !important;
 `;

@@ -106,6 +106,7 @@ function App() {
                   favoritesCount,
                   createdAt,
                 } = article;
+
                 return (
                   <ArticleCard
                     key={article.slug}

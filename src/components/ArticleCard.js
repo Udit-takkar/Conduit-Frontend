@@ -30,7 +30,7 @@ function ArticleCard({
     history.push(`/profile/${username}`);
   };
   const [favorites, setFavorites] = useState(favoritesCount);
-
+  const date = createdAt.split("T")[0];
   useEffect(() => {
     const intializeState = async () => {
       if (isLoggedIn === true) {
@@ -84,7 +84,7 @@ function ArticleCard({
         </div>
         <Author>
           <h4 onClick={() => goToProfile(username)}>{username}</h4>
-          <p>{createdAt}</p>
+          <p>{date}</p>
         </Author>
         <Like
           onClick={() => handlefavorite(slug)}
@@ -115,6 +115,7 @@ const ArticleCardContainer = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 20px;
   max-width: fit-content;
+  font-family: "Poppins";
 `;
 const Like = styled.div`
   border: 1px solid black;
@@ -149,7 +150,7 @@ const PostContainer = styled.div`
   > h2 {
     margin: 0px;
     cursor: pointer;
-    font-weight: 600 !important;
+    font-weight: 800 !important;
     font-size: 1.5rem !important;
   }
   > p {
@@ -170,7 +171,7 @@ const Author = styled.div`
   > h4 {
     font-size: 15px;
     display: inline-block;
-    font-weight: 500 !important;
+    font-weight: 700 !important;
     margin: 0px;
     color: #5cb85c;
     cursor: pointer;

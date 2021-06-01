@@ -88,7 +88,6 @@ function Profile() {
               )}
             </>
           ) : (
-            // <Skeleton height={50} width={830} />
             articles.map((article) => {
               const {
                 author: { username, image },
