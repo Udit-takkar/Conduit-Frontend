@@ -19,9 +19,14 @@ import Pagination from "./components/Pagination";
 import Skeleton from "react-loading-skeleton";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
+import { useLocation, useParams } from "react-router-dom";
+import queryString from "query-string";
 
 function App() {
   const dispatch = useDispatch();
+  const { search } = useLocation();
+  let { page } = queryString.parse(search);
+  if (page === undefined) page = 1;
   const isLoggedIn = useSelector(isUserLoggedIn);
   const getActiveItem = useSelector(activeItem);
   const isLoading = useSelector(loading);
@@ -44,11 +49,11 @@ function App() {
   NavItems = NavItems.filter(checkNav);
 
   useEffect(() => {
-    const getInitalArticles = async () => {
-      await dispatch(fetchGlobalArticles(1));
+    const getArticles = async () => {
+      await dispatch(activeTab.getPageArticles(page));
     };
-    getInitalArticles();
-  }, []);
+    getArticles();
+  }, [page]);
 
   const handleFeed = async (item) => {
     if (item === "Global Feed") {
@@ -128,6 +133,7 @@ function App() {
           getPageArticles={activeTab.getPageArticles}
           tabName={getActiveItem}
           Component="Home"
+          activePage={page}
         />
       </AppContainer>
     </>

@@ -6,23 +6,33 @@ import { getUsername } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
 import { myArticles } from "../api/myArticles";
 import { Favourite } from "../api/favouriteArticle";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import Pagination from "./Pagination";
 import Skeleton from "react-loading-skeleton";
 import Loader from "react-loader-spinner";
+import queryString from "query-string";
 
 function Profile() {
   const { username } = useParams();
   const history = useHistory();
+  const { search } = useLocation();
+  let { page } = queryString.parse(search);
+  if (page === undefined) page = 1;
 
   const LoggedInUsername = useSelector(getUsername);
-  console.log(LoggedInUsername, username);
+  // console.log(LoggedInUsername, username);
 
   const fetchMyArticles = async (page) => {
     const data = await myArticles(page, username);
     setArticles(data.articles);
     setArticlesCount(data.articlesCount);
-    setActiveTab({ getArticles: fetchMyArticles, tabName: "My Articles" });
+    setLoading(false);
+  };
+
+  const fetchFavouriteArticles = async (page) => {
+    const data = await Favourite(page, username);
+    setArticles(data.articles);
+    setArticlesCount(data.articlesCount);
     setLoading(false);
   };
 
@@ -34,21 +44,9 @@ function Profile() {
   });
   const [isLoading, setLoading] = useState(true);
 
-  const fetchFavouriteArticles = async (page) => {
-    const data = await Favourite(page, username);
-
-    setArticles(data.articles);
-    setArticlesCount(data.articlesCount);
-    setActiveTab({
-      getArticles: fetchFavouriteArticles,
-      tabName: "Favourite Articles",
-    });
-    setLoading(false);
-  };
-
   useEffect(() => {
-    fetchMyArticles(1);
-  }, [username]);
+    activeTab.getArticles(page);
+  }, [username, page, activeTab]);
 
   return (
     <>
@@ -57,7 +55,13 @@ function Profile() {
         <NavBar>
           <button
             className={activeTab.tabName === "My Articles" ? "active" : null}
-            onClick={fetchMyArticles}
+            onClick={() => {
+              setActiveTab({
+                getArticles: fetchMyArticles,
+                tabName: "My Articles",
+              });
+              console.log(queryString.parse(search));
+            }}
           >
             {LoggedInUsername === username ? (
               <p>My Articles</p>
@@ -67,7 +71,13 @@ function Profile() {
           </button>
           <button
             className={activeTab.tabName === "My Articles" ? null : "active"}
-            onClick={fetchFavouriteArticles}
+            onClick={() => {
+              setActiveTab({
+                getArticles: fetchFavouriteArticles,
+                tabName: "Favourite Articles",
+              });
+              console.log(queryString.parse(search));
+            }}
           >
             Favourite Articles
           </button>
@@ -117,6 +127,7 @@ function Profile() {
           getPageArticles={activeTab.getArticles}
           tabName={activeTab.tabName}
           Component="Profile"
+          activePage={page}
         />
       </ProfileArticles>
     </>

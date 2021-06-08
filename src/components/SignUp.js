@@ -71,6 +71,7 @@ function SignUp() {
             value={formState.username}
             type="text"
             placeholder="Username"
+            required
           />
           <input
             onChange={handleChange}
@@ -78,6 +79,7 @@ function SignUp() {
             value={formState.email}
             type="email"
             placeholder="Email"
+            required
           />
           <input
             onChange={handleChange}
@@ -85,6 +87,7 @@ function SignUp() {
             value={formState.password}
             type="password"
             placeholder="Password"
+            required
           />
           {checkError && checkError.page === "signup" && (
             <>

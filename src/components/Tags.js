@@ -8,6 +8,7 @@ import { getTags } from "../api/Tags";
 require("dotenv").config();
 
 function Tags() {
+  console.log("tag rendered");
   const [tags, setTags] = useState([]);
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
@@ -22,7 +23,8 @@ function Tags() {
         console.log(err);
       }
     };
-    setLoading(true, fetchTags());
+    setLoading(true);
+    fetchTags();
   }, []);
   return (
     <TagContainer>

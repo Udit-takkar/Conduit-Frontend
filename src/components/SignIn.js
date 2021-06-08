@@ -69,6 +69,7 @@ function SignIn() {
               value={formState.email}
               type="email"
               placeholder="Email"
+              required
             />
 
             <input
@@ -77,6 +78,7 @@ function SignIn() {
               value={formState.password}
               type="password"
               placeholder="Password"
+              required
             />
             {err && err.page === "signin" && (
               <>
