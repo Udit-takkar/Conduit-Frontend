@@ -11,6 +11,7 @@ import {
 } from "../features/authentication/signup";
 import Loader from "react-loader-spinner";
 import { useHistory } from "react-router-dom";
+import SignInIllustration from "../assets/auth_green.svg";
 
 function SignUp() {
   const dispatch = useDispatch();
@@ -45,90 +46,109 @@ function SignUp() {
     btnRef.current.removeAttribute("disabled");
   };
   return (
-    <>
-      {
-        <SignInContainer>
-          <SignInForm>
-            <LoadingSpin>
-              {loading === true && (
-                <Loader
-                  type="TailSpin"
-                  color="#5cb85c"
-                  height={50}
-                  width={50}
-                  style={{ marginTop: "50px" }}
-                />
-              )}
-            </LoadingSpin>
-
-            <h3>Sign Up</h3>
-            <Link to="/signin" style={link}>
-              Have an account?
-            </Link>
-            <input
-              onChange={handleChange}
-              name="username"
-              value={formState.username}
-              type="text"
-              placeholder="Username"
-            />
-            <input
-              onChange={handleChange}
-              name="email"
-              value={formState.email}
-              type="email"
-              placeholder="Email"
-            />
-            <input
-              onChange={handleChange}
-              name="password"
-              value={formState.password}
-              type="password"
-              placeholder="Password"
-            />
-            {checkError && checkError.page === "signup" && (
-              <>
-                {Object.entries(checkError.error).map(([key, val]) => {
-                  return (
-                    <>
-                      <span style={{ color: "#ff0033", fontWeight: 500 }}>
-                        {key} {val}
-                      </span>
-                    </>
-                  );
-                })}
-              </>
+    <PageContainer>
+      <SignUpContainer>
+        <SignUpForm>
+          <LoadingSpin>
+            {loading === true && (
+              <Loader
+                type="TailSpin"
+                color="#5cb85c"
+                height={50}
+                width={50}
+                style={{ marginTop: "50px" }}
+              />
             )}
-            <button ref={btnRef} type="submit" onClick={handleSubmit}>
-              Sign Up
-            </button>
-          </SignInForm>
-        </SignInContainer>
-      }
-    </>
+          </LoadingSpin>
+
+          <h3>Sign Up</h3>
+          <Link to="/signin" style={link}>
+            Have an account?
+          </Link>
+          <input
+            onChange={handleChange}
+            name="username"
+            value={formState.username}
+            type="text"
+            placeholder="Username"
+          />
+          <input
+            onChange={handleChange}
+            name="email"
+            value={formState.email}
+            type="email"
+            placeholder="Email"
+          />
+          <input
+            onChange={handleChange}
+            name="password"
+            value={formState.password}
+            type="password"
+            placeholder="Password"
+          />
+          {checkError && checkError.page === "signup" && (
+            <>
+              {Object.entries(checkError.error).map(([key, val]) => {
+                return (
+                  <>
+                    <span style={{ color: "#ff0033", fontWeight: 500 }}>
+                      {key} {val}
+                    </span>
+                  </>
+                );
+              })}
+            </>
+          )}
+          <button ref={btnRef} type="submit" onClick={handleSubmit}>
+            Sign Up
+          </button>
+        </SignUpForm>
+      </SignUpContainer>
+      <RightContainer>
+        <img style={signin} src={SignInIllustration} alt="Sign In" />
+      </RightContainer>
+    </PageContainer>
   );
 }
-const SignInContainer = styled.div``;
-const SignInForm = styled.div`
+const PageContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: calc(100vh - 70px);
+`;
+const RightContainer = styled.div`
+  display: flex;
+  place-items: center;
+  height: 100%;
+  width: 50vw;
+  background-color: #5cb85c;
+  margin-right: 0;
+  justify-content: center;
+`;
+const SignUpContainer = styled.div`
+  flex: 1;
+`;
+const SignUpForm = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   > h3 {
-    font-weight: 500;
+    font-weight: 700;
     line-height: 1.1;
-    font-size: 35px;
+    font-size: 45px;
   }
   > input {
     padding: 1.25rem 1.5rem;
     border-radius: 0.3rem;
     border: 1px solid rgba(0, 0, 0, 0.15);
     margin-top: 10px;
-    min-width: 35vw;
+    min-width: 30vw;
+    font-size: 1.05em;
   }
   > button {
     display: inline-block;
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 2rem;
     font-size: 1rem;
     border-radius: 0.3rem;
     color: #fff;
@@ -136,6 +156,8 @@ const SignInForm = styled.div`
     border-color: #5cb85c;
     border: none;
     margin-top: 15px;
+    cursor: pointer;
+    width: 465px;
     :hover {
       cursor: pointer;
     }
@@ -152,5 +174,9 @@ const link = {
   textDecoration: "none",
   fontSize: "15px ",
   color: "#5cb85c",
+};
+const signin = {
+  maxWidth: "500px",
+  maxHeight: "600px",
 };
 export default SignUp;
