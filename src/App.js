@@ -11,6 +11,7 @@ import {
   getArticlesCount,
   loading,
   activeItem,
+  fetchArticlesByTag,
 } from "./features/articles/articleSlice";
 import { useDispatch, useSelector } from "react-redux";
 import uuid from "react-uuid";
@@ -56,11 +57,29 @@ function App() {
   NavItems = NavItems.filter(checkNav);
 
   useEffect(() => {
-    const getArticles = async () => {
+    const getFeedArticles = async () => {
       await dispatch(activeTab.getPageArticles(page));
     };
-    getArticles();
+    const getFeedArticlesByTag = async () => {
+      await dispatch(fetchArticlesByTag({ page, tag: getActiveItem }));
+    };
+
+    if (getActiveItem === "Global Feed" || getActiveItem === "Your Feed") {
+      getFeedArticles();
+    } else if (getActiveItem !== "undefined" && getActiveItem) {
+      console.log(getActiveItem);
+      getFeedArticlesByTag();
+    }
   }, [page, activeTab]);
+
+  // useEffect(()=>{
+  //    if(activeItem!=='Global Feed' && activeItem!=="Your Feed"){
+  //     setActiveTab({
+  //       getPageArticles:fetchArticlesByTag
+  //     })
+  //     history.push(`/${activeItem.trim()}/?page=1`)
+  //    }
+  // },[activeItem])
 
   useEffect(() => {
     history.push("/global/?page=1");
@@ -147,6 +166,7 @@ function App() {
           tabName={getActiveItem}
           Component="Home"
           activePage={page}
+          activeItem={activeItem}
         />
       </AppContainer>
     </>

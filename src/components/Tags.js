@@ -5,10 +5,12 @@ import styled from "styled-components";
 import { fetchArticlesByTag } from "../features/articles/articleSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { getTags } from "../api/Tags";
+import { useHistory } from "react-router-dom";
 require("dotenv").config();
 
 function Tags() {
   console.log("tag rendered");
+  const history = useHistory();
   const [tags, setTags] = useState([]);
   const dispatch = useDispatch();
   const [isLoading, setLoading] = useState(false);
@@ -37,6 +39,7 @@ function Tags() {
             <TagsList
               onClick={() => {
                 dispatch(fetchArticlesByTag({ page: 1, tag }));
+                history.push(`/${tag.trim()}/?page=1`);
               }}
               key={uuid()}
             >
