@@ -1,10 +1,11 @@
 import React from "react";
 import axios from "axios";
+import { getToken } from "./Token";
 
 const url = "https://conduit.productionready.io/api/articles";
 
 export const postArticle = async ({ title, description, body, tagList }) => {
-  const token = JSON.stringify(localStorage.getItem("token"));
+  const token = getToken();
   try {
     const res = await axios.post(
       url,

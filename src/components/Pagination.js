@@ -8,9 +8,8 @@ import { useHistory } from "react-router-dom";
 function Pagination({
   articlesCount,
   activePage,
-  getPageArticles,
+
   tabName,
-  Component,
 }) {
   const [isActive, setIsActive] = useState(activePage);
   console.log(isActive);

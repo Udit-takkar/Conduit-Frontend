@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { updateUser } from "../../api/updateUser";
 
-const initialState = {
+let initialState = {
   loading: false,
   error: null,
   isLoggedIn: false,
@@ -11,8 +11,25 @@ const initialState = {
   bio: "",
   image: null,
 };
+
 const registerURL = "https://conduit.productionready.io/api/users";
 const loginURL = "https://conduit.productionready.io/api/users/login";
+
+const user = JSON.parse(localStorage.getItem("user"))
+  ? JSON.parse(localStorage.getItem("user"))
+  : null;
+
+if (user) {
+  initialState = {
+    loading: false,
+    error: null,
+    isLoggedIn: true,
+    username: user.username,
+    email: user.email,
+    bio: user.bio,
+    image: user.image,
+  };
+}
 
 export const signup = createAsyncThunk(
   "signup/register",
@@ -25,7 +42,9 @@ export const signup = createAsyncThunk(
           password,
         },
       });
-      localStorage.setItem("token", res.data.user.token);
+
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+
       return res.data;
     } catch (e) {
       return rejectWithValue(e.response);
@@ -44,7 +63,7 @@ export const login = createAsyncThunk(
         },
       });
 
-      localStorage.setItem("token", res.data.user.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
       return res.data;
     } catch (err) {
       console.log(err.response);

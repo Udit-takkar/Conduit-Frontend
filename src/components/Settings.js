@@ -53,7 +53,7 @@ function Settings() {
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     await dispatch(logoutUser());
 
     history.push("/");
@@ -138,6 +138,9 @@ const InputBox = styled.div`
     margin-top: 10px;
     min-width: 40vw;
     font-family: "poppins";
+    :focus {
+      outline: none;
+    }
   }
 `;
 

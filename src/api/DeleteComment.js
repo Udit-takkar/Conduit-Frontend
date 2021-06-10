@@ -1,10 +1,11 @@
 import axios from "axios";
+import { getToken } from "./Token";
 
 const url = "https://conduit.productionready.io/api/articles/";
 
 export const DeleteComment = async (slug, id) => {
   console.log(slug, id);
-  const token = JSON.stringify(localStorage.getItem("token"));
+  const token = getToken();
   try {
     const res = await axios.delete(
       `${url}${slug}/comments/${id}`,

@@ -148,6 +148,9 @@ const InputBox = styled.div`
       font-family: "poppins";
     }
     font-family: "poppins";
+    :focus {
+      outline: none;
+    }
   }
 `;
 const NewPostContainer = styled.div`
@@ -166,6 +169,7 @@ const NewPostContainer = styled.div`
       color: rgba(0, 0, 0, 0.55);
       font-family: "poppins";
     }
+
     font-family: "poppins";
   }
   > button {

@@ -36,7 +36,11 @@ function ArticleCard({
       if (isLoggedIn === true) {
         const checkFavorite = await isFavourite(slug);
         // console.log(checkFavorite);
-        if (checkFavorite.article.favorited === true) {
+        if (
+          checkFavorite &&
+          checkFavorite.article &&
+          checkFavorite.article.favorited === true
+        ) {
           setIsactive(true);
         }
       }

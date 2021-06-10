@@ -142,6 +142,7 @@ const ProfileArticles = styled.div`
 `;
 const NavBar = styled.div`
   display: flex;
+
   margin-top: 2rem;
   margin-left: 20vw;
   align-self: flex-start;
@@ -149,6 +150,7 @@ const NavBar = styled.div`
   > button {
     display: inline-block;
     border: none;
+
     outline: none;
     background-color: white;
     margin-right: 5px;

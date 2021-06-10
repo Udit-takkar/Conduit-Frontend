@@ -1,9 +1,10 @@
 import axios from "axios";
+import { getToken } from "./Token";
 
 const url = "https://conduit.productionready.io/api/profiles/";
 
 export const UnFollow = async (username) => {
-  const token = JSON.stringify(localStorage.getItem("token"));
+  const token = getToken();
 
   try {
     const res = await axios.delete(

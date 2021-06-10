@@ -34,8 +34,7 @@ function ProfileBanner({ username, LoggedInUsername }) {
   useEffect(() => {
     const intializeState = async () => {
       const res = await CheckFollowing(username);
-      console.log(res);
-      setIsFollowing(res.profile.following);
+      if (res && res.data) setIsFollowing(res.profile.following);
     };
     intializeState();
   }, []);

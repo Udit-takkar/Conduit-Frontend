@@ -30,8 +30,6 @@ function App() {
   const { search } = useLocation();
   // const { pathname } = useLocation();
 
-  // const tab = pathname.split("/")[1];
-
   let { page } = queryString.parse(search);
   if (page === undefined) page = 1;
 

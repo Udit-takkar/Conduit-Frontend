@@ -193,7 +193,7 @@ const CommentBox = styled.div`
   flex-direction: column;
   place-items: center;
   > textarea {
-    min-width: 50vw;
+    min-width: 550px;
     min-height: 20vh;
     border: 1px solid #e5e5e5;
     font-family: "poppins";
@@ -206,7 +206,7 @@ const ButtonBox = styled.div`
   font-weight: 300;
   padding: 0.75rem 1.35rem;
   background-color: #f5f5f5;
-  min-width: 46vw;
+  min-width: 550px;
   box-shadow: none !important;
   > button {
     font-weight: 600;
