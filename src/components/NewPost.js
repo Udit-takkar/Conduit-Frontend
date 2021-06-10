@@ -6,6 +6,14 @@ import { getUsername } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { updateArticle } from "../api/updateArticle";
+import Yamde from "yamde";
+import { MdTitle } from "react-icons/md";
+import {
+  faHeading,
+  faParagraph,
+  faHashtag,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function NewPost() {
   const username = useSelector(getUsername);
@@ -34,6 +42,12 @@ function NewPost() {
   const handleChange = (e) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
+
+  const handleEditor = (e) => {
+    console.log(e);
+    setFormState({ ...formState, body: e });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Check If We have to update the article
@@ -57,6 +71,7 @@ function NewPost() {
     const tagsList = tags.split(" ");
     setFormState({ ...formState, tagList: tagsList });
   };
+
   return (
     <>
       <NewPostContainer>
@@ -70,30 +85,51 @@ function NewPost() {
               );
             })
           : null}
-        <input
-          onChange={handleChange}
-          value={formState.title}
-          placeholder="Article Title"
-          name="title"
-        />
-        <input
-          onChange={handleChange}
-          value={formState.description}
-          placeholder="What's this article about"
-          name="description"
-        />
-        <textarea
+
+        <InputBox>
+          <FontAwesomeIcon icon={faHeading} />
+          <input
+            onChange={handleChange}
+            value={formState.title}
+            placeholder="Article Title"
+            name="title"
+            id="input"
+          />
+        </InputBox>
+        <InputBox>
+          <FontAwesomeIcon icon={faParagraph} />
+          <input
+            onChange={handleChange}
+            value={formState.description}
+            placeholder="What's this article about"
+            name="description"
+          />
+        </InputBox>
+
+        {/* <textarea
           onChange={handleChange}
           value={formState.body}
           placeholder="Write your Article(in markdown)"
           name="body"
-        />
-        <input
-          onChange={handleTags}
-          value={tags}
-          placeholder="Enter Tags"
-          name="tags"
-        />
+        /> */}
+        <Editor>
+          <Yamde
+            name="body"
+            value={formState.body}
+            handler={handleEditor}
+            theme="light"
+          />
+        </Editor>
+        <InputBox>
+          <FontAwesomeIcon icon={faHashtag} />
+          <input
+            onChange={handleTags}
+            value={tags}
+            placeholder="Enter Tags"
+            name="tags"
+          />
+        </InputBox>
+
         <button onClick={handleSubmit}>
           {location.state !== undefined ? (
             <span>Update Article</span>
@@ -105,7 +141,25 @@ function NewPost() {
     </>
   );
 }
+const InputBox = styled.div`
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.3rem;
+  padding-left: 20px;
+  margin-top: 10px;
+  > input {
+    padding: 1.25rem 1.5rem;
+    border: none;
+
+    min-width: 60vw;
+    ::placeholder {
+      color: rgba(0, 0, 0, 0.55);
+      font-family: "poppins";
+    }
+    font-family: "poppins";
+  }
+`;
 const NewPostContainer = styled.div`
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   place-items: center;
@@ -118,7 +172,9 @@ const NewPostContainer = styled.div`
     min-width: 60vw;
     ::placeholder {
       color: rgba(0, 0, 0, 0.55);
+      font-family: "poppins";
     }
+    font-family: "poppins";
   }
   > button {
     display: inline-block;
@@ -131,6 +187,7 @@ const NewPostContainer = styled.div`
     border: none;
     margin-top: 15px;
     cursor: pointer;
+    width: 60vw;
   }
   > textarea {
     padding: 0.75rem 1.5rem;
@@ -151,6 +208,10 @@ const Error = styled.div`
   > span {
     text-transform: uppercase;
   }
+`;
+
+const Editor = styled.div`
+  width: 65vw;
 `;
 
 export default NewPost;

@@ -52,7 +52,7 @@ function Header() {
 const HeaderContainer = styled.div`
   position: sticky;
   top: 0;
-  max-height: 70px;
+  min-height: 70px;
   min-width: 100vw;
   display: flex;
   flex-direction: row;

@@ -7,6 +7,7 @@ import { DeleteComment } from "../api/DeleteComment";
 function Comments({ slug, Loading }) {
   const [comments, setComments] = useState([]);
   const [deleting, setDeleting] = useState(false);
+
   const handleDeleteComment = async (id) => {
     setDeleting(true);
     const res = await DeleteComment(slug, id);
@@ -15,6 +16,7 @@ function Comments({ slug, Loading }) {
     }
     console.log(res);
   };
+
   useEffect(() => {
     const fetchComments = async () => {
       const data = await getCommentsBySlug(slug);

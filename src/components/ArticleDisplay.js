@@ -84,6 +84,9 @@ function ArticleDisplay() {
     }
     if (res.comment) {
       setComment({ comment: "", Loading: false });
+      const cmtBox = document.getElementById("CommentBox");
+      console.log(cmtBox.scrollHeight);
+      window.scrollTo({ top: cmtBox.scrollHeight, behaviour: "smooth" });
     }
     console.log(comment);
   };
@@ -162,7 +165,7 @@ function ArticleDisplay() {
         )}
       </Body>
       <ColoredLine color="gray" />
-      <CommentBox>
+      <CommentBox id="CommentBox">
         <textarea
           name="comment"
           value={comment.comment}
@@ -193,6 +196,7 @@ const CommentBox = styled.div`
     min-width: 50vw;
     min-height: 20vh;
     border: 1px solid #e5e5e5;
+    font-family: "poppins";
   }
 `;
 const ButtonBox = styled.div`
