@@ -15,9 +15,6 @@ function Routes() {
     <>
       <Header />
       <Switch>
-        <Route exact path="/">
-          <CoreLayout />
-        </Route>
         <Route exact path="/signin">
           <SignIn />
         </Route>
@@ -33,8 +30,11 @@ function Routes() {
         <Route exact path="/profile/:username">
           <Profile />
         </Route>
-        <Route path="/articles/:slug">
+        <Route exact path="/articles/:slug">
           <ArticleDisplay />
+        </Route>
+        <Route path="/">
+          <CoreLayout />
         </Route>
       </Switch>
     </>

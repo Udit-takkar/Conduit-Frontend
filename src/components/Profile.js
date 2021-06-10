@@ -45,6 +45,7 @@ function Profile() {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     activeTab.getArticles(page);
   }, [username, page, activeTab]);
 
@@ -60,7 +61,7 @@ function Profile() {
                 getArticles: fetchMyArticles,
                 tabName: "My Articles",
               });
-              console.log(queryString.parse(search));
+              history.push({ search: "?page=1" });
             }}
           >
             {LoggedInUsername === username ? (
@@ -76,7 +77,7 @@ function Profile() {
                 getArticles: fetchFavouriteArticles,
                 tabName: "Favourite Articles",
               });
-              console.log(queryString.parse(search));
+              history.push({ search: "?page=1" });
             }}
           >
             Favourite Articles

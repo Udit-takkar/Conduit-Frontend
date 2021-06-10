@@ -93,7 +93,7 @@ function ArticleCard({
             color: isactive ? "white" : "#5cb85c",
           }}
         >
-          <FontAwesomeIcon icon={faHeart} />
+          <FontAwesomeIcon style={{ marginRight: "2px" }} icon={faHeart} />
           {favorites}
         </Like>
       </AuthorContainer>
@@ -119,8 +119,8 @@ const ArticleCardContainer = styled.div`
 `;
 const Like = styled.div`
   border: 1px solid black;
-  height: 25px;
-  width: 25px;
+  height: 30px;
+  width: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -131,7 +131,7 @@ const Like = styled.div`
   border-color: #5cb85c;
   font-size: 13px;
   cursor: pointer;
-  :hover {
+  &:hover {
     background-color: green;
     color: white;
   }
@@ -157,7 +157,6 @@ const PostContainer = styled.div`
     margin: 0px;
     cursor: pointer;
     font-weight: 300;
-
     color: #999;
   }
 `;

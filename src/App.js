@@ -21,12 +21,19 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
 import { useLocation, useParams } from "react-router-dom";
 import queryString from "query-string";
+import { useHistory } from "react-router-dom";
 
 function App() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { search } = useLocation();
+  // const { pathname } = useLocation();
+
+  // const tab = pathname.split("/")[1];
+
   let { page } = queryString.parse(search);
   if (page === undefined) page = 1;
+
   const isLoggedIn = useSelector(isUserLoggedIn);
   const getActiveItem = useSelector(activeItem);
   const isLoading = useSelector(loading);
@@ -53,19 +60,23 @@ function App() {
       await dispatch(activeTab.getPageArticles(page));
     };
     getArticles();
-  }, [page]);
+  }, [page, activeTab]);
+
+  useEffect(() => {
+    history.push("/global/?page=1");
+  }, []);
 
   const handleFeed = async (item) => {
     if (item === "Global Feed") {
-      await dispatch(fetchGlobalArticles(1));
       setActiveTab({
         getPageArticles: fetchGlobalArticles,
       });
+      history.push("/global/?page=1");
     } else {
-      await dispatch(fetchFeedArticles(1));
       setActiveTab({
         getPageArticles: fetchFeedArticles,
       });
+      history.push("/myfeed/?page=1");
     }
   };
 
@@ -77,7 +88,9 @@ function App() {
             <button
               className={getActiveItem === item ? "active" : null}
               key={item}
-              onClick={() => handleFeed(item)}
+              onClick={() => {
+                handleFeed(item);
+              }}
             >
               {item}
             </button>
