@@ -105,13 +105,6 @@ function NewPost() {
             name="description"
           />
         </InputBox>
-
-        {/* <textarea
-          onChange={handleChange}
-          value={formState.body}
-          placeholder="Write your Article(in markdown)"
-          name="body"
-        /> */}
         <Editor>
           <Yamde
             name="body"
@@ -149,7 +142,6 @@ const InputBox = styled.div`
   > input {
     padding: 1.25rem 1.5rem;
     border: none;
-
     min-width: 60vw;
     ::placeholder {
       color: rgba(0, 0, 0, 0.55);
@@ -179,7 +171,7 @@ const NewPostContainer = styled.div`
   > button {
     display: inline-block;
     padding: 1rem 1.75rem;
-    font-size: 1rem;
+    font-size: 1.25rem;
     border-radius: 0.3rem;
     color: #fff;
     background-color: #5cb85c;
@@ -187,18 +179,8 @@ const NewPostContainer = styled.div`
     border: none;
     margin-top: 15px;
     cursor: pointer;
-    width: 60vw;
+    width: 850px;
   }
-  > textarea {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.3rem;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    margin-top: 10px;
-    min-width: 60vw;
-    min-height: 20vh;
-    ::placeholder {
-      color: rgba(0, 0, 0, 0.55);
-    }
   }
 `;
 
@@ -211,7 +193,7 @@ const Error = styled.div`
 `;
 
 const Editor = styled.div`
-  width: 65vw;
+  width: 850px;
 `;
 
 export default NewPost;

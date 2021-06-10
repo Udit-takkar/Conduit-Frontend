@@ -137,7 +137,7 @@ const SignInForm = styled.div`
     border-radius: 0.3rem;
     border: 1px solid rgba(0, 0, 0, 0.15);
     margin-top: 10px;
-    min-width: 30vw;
+    min-width: 400px;
     font-size: 1.05em;
   }
   > button {
@@ -151,7 +151,8 @@ const SignInForm = styled.div`
     border: none;
     margin-top: 15px;
     cursor: pointer;
-    width: 465px;
+    min-width: 400px;
+    // width: 465px;
   }
 `;
 const needaccount = {
