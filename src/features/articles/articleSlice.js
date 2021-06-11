@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
+import { getToken } from "../../api/Token";
 const initialState = {
   loading: false,
   error: null,
@@ -19,7 +19,7 @@ const tagURL = "https://conduit.productionready.io/api/articles?tag=";
 export const fetchFeedArticles = createAsyncThunk(
   "articles/feed",
   async (page) => {
-    const token = JSON.stringify(localStorage.getItem("token"));
+    const token = getToken();
     try {
       const response = await axios.get(`${FeedArticlesURL}${(page - 1) * 10}`, {
         headers: {
