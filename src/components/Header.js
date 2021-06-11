@@ -13,13 +13,13 @@ function Header() {
   const isLoggedIn = useSelector(isUserLoggedIn);
   const username = useSelector(getUsername);
   const goToHome = () => {
-    history.push("/");
+    history.push("/global/?page=1");
   };
   return (
     <HeaderContainer>
       <h2 onClick={goToHome}>conduit</h2>
       <HeaderLinks>
-        <Link to="/" style={linkStyle}>
+        <Link to="/global/?page=1" style={linkStyle}>
           Home
         </Link>
 
