@@ -1,6 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-// import axios from "axios";
-import axios from "../../config/api.config";
 import { updateUser, registerUser, loginUser } from "../../ApiEndpoints/user";
 
 let initialState = {
@@ -12,22 +10,6 @@ let initialState = {
   bio: "",
   image: null,
 };
-
-// const user = JSON.parse(localStorage.getItem("user"))
-//   ? JSON.parse(localStorage.getItem("user"))
-//   : null;
-
-// if (user) {
-//   initialState = {
-//     loading: false,
-//     error: null,
-//     isLoggedIn: true,
-//     username: user.username,
-//     email: user.email,
-//     bio: user.bio,
-//     image: user.image,
-//   };
-// }
 
 export const signup = createAsyncThunk("signup/register", registerUser);
 

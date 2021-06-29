@@ -13,8 +13,6 @@ const initialState = {
 export const fetchFeedArticles = createAsyncThunk(
   "articles/feed",
   async (page, { getState }) => {
-    // await setToken(getState().signup.token);
-
     try {
       const response = await axios.get(
         `/articles/feed?limit=10&offset=${(page - 1) * 10}`
@@ -144,12 +142,8 @@ export const articleSlice = createSlice({
     [fetchArticlesByTag.fulfilled]: (state, action) => {
       let updateNavItems = state.navItems;
 
-      if (state.navItems.length === 3) {
-        // check if a tag tab is already open
-        updateNavItems[2] = action.meta.arg.tag; //Just replace it with new tag
-      } else {
-        updateNavItems = [...updateNavItems, action.meta.arg.tag];
-      }
+      updateNavItems[2] = action.meta.arg.tag; //Just replace it with new tag
+
       console.log(action);
       Object.assign(state, {
         loading: false,
@@ -168,7 +162,7 @@ export const articleSlice = createSlice({
         articles: [],
         articlesCount: 0,
         navItems: ["Your Feed", "Global Feed"],
-        activeItem: action.meta.arg.tag,
+        activeItem: "Global Feed",
       });
     },
   },

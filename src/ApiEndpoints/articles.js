@@ -21,7 +21,8 @@ export const getCommentsBySlug = async (slug) => {
 export const deleteArticle = async (slug) => {
   try {
     const res = await axios.delete(`/articles/${slug}`);
-    return res.data;
+    console.log(res);
+    return res;
   } catch (e) {
     return e.response;
   }

@@ -28,7 +28,7 @@ function App() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { search } = useLocation();
-  // const { pathname } = useLocation();
+  const { pathname } = useLocation();
 
   let { page } = queryString.parse(search);
   if (page === undefined) page = 1;
@@ -59,25 +59,14 @@ function App() {
       await dispatch(activeTab.getPageArticles(page));
     };
     const getFeedArticlesByTag = async () => {
-      await dispatch(fetchArticlesByTag({ page, tag: getActiveItem }));
+      await dispatch(fetchArticlesByTag({ page, tag: pathname.slice(1, -1) }));
     };
-
-    if (getActiveItem === "Global Feed" || getActiveItem === "Your Feed") {
+    if (pathname === "/global/" || pathname === "/myfeed/") {
       getFeedArticles();
-    } else if (getActiveItem !== "undefined" && getActiveItem) {
-      console.log(getActiveItem);
+    } else if (pathname !== "undefined" && pathname) {
       getFeedArticlesByTag();
     }
-  }, [page, activeTab]);
-
-  // useEffect(()=>{
-  //    if(activeItem!=='Global Feed' && activeItem!=="Your Feed"){
-  //     setActiveTab({
-  //       getPageArticles:fetchArticlesByTag
-  //     })
-  //     history.push(`/${activeItem.trim()}/?page=1`)
-  //    }
-  // },[activeItem])
+  }, [page, pathname]);
 
   useEffect(() => {
     history.push("/global/?page=1");
@@ -89,7 +78,7 @@ function App() {
         getPageArticles: fetchGlobalArticles,
       });
       history.push("/global/?page=1");
-    } else {
+    } else if (item === "Your Feed") {
       setActiveTab({
         getPageArticles: fetchFeedArticles,
       });
