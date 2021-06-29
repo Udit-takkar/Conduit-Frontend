@@ -6,7 +6,6 @@ import { getUsername } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { updateArticle } from "../ApiEndpoints/articles";
-import Yamde from "yamde";
 import { MdTitle } from "react-icons/md";
 import {
   faHeading,
@@ -14,6 +13,8 @@ import {
   faHashtag,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // ES6
 
 function NewPost() {
   const username = useSelector(getUsername);
@@ -44,7 +45,7 @@ function NewPost() {
   };
 
   const handleEditor = (e) => {
-    console.log(e);
+    // console.log(e);
     setFormState({ ...formState, body: e });
   };
 
@@ -106,11 +107,11 @@ function NewPost() {
           />
         </InputBox>
         <Editor>
-          <Yamde
+          <ReactQuill
             name="body"
             value={formState.body}
-            handler={handleEditor}
-            theme="light"
+            onChange={handleEditor}
+            style={{ height: "300px" }}
           />
         </Editor>
         <InputBox>
@@ -183,7 +184,8 @@ const NewPostContainer = styled.div`
     border: none;
     margin-top: 15px;
     cursor: pointer;
-    width: 850px;
+    width: 63.5%;
+    margin-bottom:30px
   }
   }
 `;
@@ -197,7 +199,9 @@ const Error = styled.div`
 `;
 
 const Editor = styled.div`
-  width: 850px;
+  margin-top: 20px;
+  width: 63.5%;
+  height: 350px;
 `;
 
 export default NewPost;
