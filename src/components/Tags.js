@@ -4,7 +4,7 @@ import uuid from "react-uuid";
 import styled from "styled-components";
 import { fetchArticlesByTag } from "../features/articles/articleSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getTags } from "../api/Tags";
+import { getTags } from "../ApiEndpoints/tags";
 import { useHistory } from "react-router-dom";
 require("dotenv").config();
 

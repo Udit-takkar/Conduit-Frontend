@@ -36,7 +36,6 @@ function App() {
   const isLoggedIn = useSelector(isUserLoggedIn);
   const getActiveItem = useSelector(activeItem);
   const isLoading = useSelector(loading);
-  let NavItems = useSelector(navItems);
 
   const articles = useSelector(getArticles);
   const articlesCount = useSelector(getArticlesCount);
@@ -45,6 +44,7 @@ function App() {
     getPageArticles: fetchGlobalArticles,
   });
 
+  let NavItems = useSelector(navItems);
   // Checks which tab to show depending if user has logged in or not
   const checkNav = (NavItem) => {
     if (isLoggedIn === false && NavItem === "Your Feed") {
@@ -69,10 +69,11 @@ function App() {
   }, [page, pathname]);
 
   useEffect(() => {
+    //Just for intial page load
     history.push("/global/?page=1");
   }, []);
 
-  const handleFeed = async (item) => {
+  const handleNavItemClick = async (item) => {
     if (item === "Global Feed") {
       setActiveTab({
         getPageArticles: fetchGlobalArticles,
@@ -95,7 +96,7 @@ function App() {
               className={getActiveItem === item ? "active" : null}
               key={item}
               onClick={() => {
-                handleFeed(item);
+                handleNavItemClick(item);
               }}
             >
               {item}
