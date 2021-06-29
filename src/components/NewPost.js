@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { postArticle } from "../api/postArticle";
+import { postArticle } from "../ApiEndpoints/articles";
 import { Redirect, useHistory } from "react-router-dom";
 import { getUsername } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { updateArticle } from "../ApiEndpoints/articles";
 import { MdTitle } from "react-icons/md";
+import Yamde from "yamde";
 import {
   faHeading,
   faParagraph,
   faHashtag,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css"; // ES6
 
 function NewPost() {
   const username = useSelector(getUsername);
@@ -45,7 +44,7 @@ function NewPost() {
   };
 
   const handleEditor = (e) => {
-    // console.log(e);
+    // console.log(typeof e);
     setFormState({ ...formState, body: e });
   };
 
@@ -107,11 +106,11 @@ function NewPost() {
           />
         </InputBox>
         <Editor>
-          <ReactQuill
+          <Yamde
             name="body"
             value={formState.body}
-            onChange={handleEditor}
-            style={{ height: "300px" }}
+            handler={handleEditor}
+            theme="light"
           />
         </Editor>
         <InputBox>
@@ -202,6 +201,7 @@ const Editor = styled.div`
   margin-top: 20px;
   width: 63.5%;
   height: 350px;
+  margin-bottom: 30px;
 `;
 
 export default NewPost;
