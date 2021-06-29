@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import ArticleCard from "./components/ArticleCard";
+import ArticleCard from "./components/Article Pages/ArticleCard";
 import { NavLink } from "react-router-dom";
 import {
   fetchFeedArticles,
@@ -16,7 +16,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import uuid from "react-uuid";
 import { isUserLoggedIn } from "./features/authentication/signup";
-import Pagination from "./components/Pagination";
+import Pagination from "./components/Article Pages/Pagination";
 import Skeleton from "react-loading-skeleton";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";

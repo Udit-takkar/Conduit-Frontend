@@ -7,11 +7,11 @@ import {
   getUserBio,
   update,
   error,
-} from "../features/authentication/signup";
+} from "../../features/authentication/signup";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "../api/updateUser";
+import { updateUser } from "../../ApiEndpoints/user";
 import { useHistory } from "react-router-dom";
-import { logoutUser } from "../features/authentication/signup";
+import { logoutUser } from "../../features/authentication/signup";
 import {
   faLink,
   faUser,

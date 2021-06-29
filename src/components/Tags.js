@@ -19,7 +19,7 @@ function Tags() {
     const fetchTags = async () => {
       try {
         const res = await getTags();
-        setTags(res.tags.splice(10));
+        setTags(res.tags);
         setLoading(false);
       } catch (err) {
         console.log(err);

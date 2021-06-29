@@ -3,11 +3,11 @@ import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { MarkFavourite } from "../api/MarkFavourite";
-import { getArticleBySlug } from "../api/ArticleByslug";
-import { MarkUnFavourite } from "../api/MarkUnFavorite";
-import { isFavourite } from "../api/IsFavourite";
-import { isUserLoggedIn } from "../features/authentication/signup";
+import { MarkFavourite } from "../../ApiEndpoints/articles";
+import { getArticleBySlug } from "../../ApiEndpoints/articles";
+import { MarkUnFavourite } from "../../ApiEndpoints/articles";
+import { isFavourite } from "../../ApiEndpoints/articles";
+import { isUserLoggedIn } from "../../features/authentication/signup";
 import { useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
 

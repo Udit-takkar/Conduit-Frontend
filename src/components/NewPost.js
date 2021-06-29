@@ -5,7 +5,7 @@ import { Redirect, useHistory } from "react-router-dom";
 import { getUsername } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { updateArticle } from "../api/updateArticle";
+import { updateArticle } from "../ApiEndpoints/articles";
 import Yamde from "yamde";
 import { MdTitle } from "react-icons/md";
 import {

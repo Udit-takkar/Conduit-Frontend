@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { updateUser } from "../../api/updateUser";
+// import axios from "axios";
+import axios from "../../config/api.config";
+import { updateUser, registerUser, loginUser } from "../../ApiEndpoints/user";
 
 let initialState = {
   loading: false,
@@ -12,65 +13,25 @@ let initialState = {
   image: null,
 };
 
-const registerURL = "https://conduit.productionready.io/api/users";
-const loginURL = "https://conduit.productionready.io/api/users/login";
+// const user = JSON.parse(localStorage.getItem("user"))
+//   ? JSON.parse(localStorage.getItem("user"))
+//   : null;
 
-const user = JSON.parse(localStorage.getItem("user"))
-  ? JSON.parse(localStorage.getItem("user"))
-  : null;
+// if (user) {
+//   initialState = {
+//     loading: false,
+//     error: null,
+//     isLoggedIn: true,
+//     username: user.username,
+//     email: user.email,
+//     bio: user.bio,
+//     image: user.image,
+//   };
+// }
 
-if (user) {
-  initialState = {
-    loading: false,
-    error: null,
-    isLoggedIn: true,
-    username: user.username,
-    email: user.email,
-    bio: user.bio,
-    image: user.image,
-  };
-}
+export const signup = createAsyncThunk("signup/register", registerUser);
 
-export const signup = createAsyncThunk(
-  "signup/register",
-  async ({ username, email, password }, { rejectWithValue }) => {
-    try {
-      const res = await axios.post(registerURL, {
-        user: {
-          username,
-          email,
-          password,
-        },
-      });
-
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-
-      return res.data;
-    } catch (e) {
-      return rejectWithValue(e.response);
-    }
-  }
-);
-
-export const login = createAsyncThunk(
-  "signup/login",
-  async ({ email, password }, { rejectWithValue }) => {
-    try {
-      const res = await axios.post(loginURL, {
-        user: {
-          email,
-          password,
-        },
-      });
-
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      return res.data;
-    } catch (err) {
-      console.log(err.response);
-      return rejectWithValue(err.response);
-    }
-  }
-);
+export const login = createAsyncThunk("signup/login", loginUser);
 
 export const update = createAsyncThunk("signup/update", updateUser);
 
@@ -153,7 +114,8 @@ export const SignUpSlice = createSlice({
       console.log(action);
       Object.assign(state, {
         loading: false,
-        error: { page: "signin", error: action.payload.data.errors },
+        // error: { page: "signin", error: action.payload.data.errors },
+        error: null,
         isLoggedIn: false,
         username: "",
         email: "",
@@ -163,15 +125,6 @@ export const SignUpSlice = createSlice({
     },
     [update.pending]: (state, action) => {
       console.log(action);
-      Object.assign(state, {
-        loading: true,
-        error: null,
-        isLoggedIn: false,
-        username: "",
-        email: "",
-        bio: "",
-        image: null,
-      });
     },
     [update.fulfilled]: (state, action) => {
       console.log(action);
@@ -187,15 +140,6 @@ export const SignUpSlice = createSlice({
     },
     [update.rejected]: (state, action) => {
       console.log(action);
-      Object.assign(state, {
-        loading: false,
-        error: { page: "update", error: action.payload.data.errors },
-        isLoggedIn: false,
-        username: "",
-        email: "",
-        bio: "",
-        image: null,
-      });
     },
   },
 });
@@ -209,5 +153,6 @@ export const getUsername = (state) => state.signup.username;
 export const getUserEmail = (state) => state.signup.email;
 export const getUserImg = (state) => state.signup.image;
 export const getUserBio = (state) => state.signup.bio;
+export const getUserToken = (state) => state.signup.token;
 export const { logoutUser } = SignUpSlice.actions;
 export default SignUpSlice.reducer;

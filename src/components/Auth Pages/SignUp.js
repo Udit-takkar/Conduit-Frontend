@@ -3,15 +3,15 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Link, Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signup } from "../features/authentication/signup";
+import { signup } from "../../features/authentication/signup";
 import {
   isLoading,
   isUserLoggedIn,
   error,
-} from "../features/authentication/signup";
+} from "../../features/authentication/signup";
 import Loader from "react-loader-spinner";
 import { useHistory } from "react-router-dom";
-import SignInIllustration from "../assets/auth_green.svg";
+import SignInIllustration from "../../assets/auth_green.svg";
 
 function SignUp() {
   const dispatch = useDispatch();
