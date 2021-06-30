@@ -10,7 +10,21 @@ let initialState = {
   bio: "",
   image: null,
 };
+const user = JSON.parse(localStorage.getItem("user"))
+  ? JSON.parse(localStorage.getItem("user"))
+  : null;
 
+if (user) {
+  initialState = {
+    loading: false,
+    error: null,
+    isLoggedIn: true,
+    username: user.username,
+    email: user.email,
+    bio: user.bio,
+    image: user.image,
+  };
+}
 export const signup = createAsyncThunk("signup/register", registerUser);
 
 export const login = createAsyncThunk("signup/login", loginUser);
@@ -22,6 +36,7 @@ export const SignUpSlice = createSlice({
   initialState,
   reducers: {
     logoutUser: (state, action) => {
+      localStorage.removeItem("user");
       Object.assign(state, {
         loading: false,
         error: null,

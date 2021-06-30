@@ -33,6 +33,13 @@ export const registerUser = async (
         password,
       },
     });
+    const user = {
+      username: res.data.user.username,
+      email: res.data.user.email,
+      bio: res.data.user.bio,
+      image: res.data.user.image,
+    };
+    localStorage.setItem("user", JSON.stringify(user));
 
     return res.data;
   } catch (e) {
@@ -48,6 +55,13 @@ export const loginUser = async ({ email, password }, { rejectWithValue }) => {
         password: password,
       },
     });
+    const user = {
+      username: res.data.user.username,
+      email: res.data.user.email,
+      bio: res.data.user.bio,
+      image: res.data.user.image,
+    };
+    localStorage.setItem("user", JSON.stringify(user));
 
     return res.data;
   } catch (err) {
