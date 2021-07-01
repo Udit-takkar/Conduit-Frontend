@@ -4,7 +4,7 @@ import uuid from "react-uuid";
 import styled from "styled-components";
 import { fetchArticlesByTag } from "../features/articles/articleSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { getTags } from "../api/Tags";
+import { getTags } from "../ApiEndpoints/tags";
 import { useHistory } from "react-router-dom";
 require("dotenv").config();
 
@@ -19,7 +19,7 @@ function Tags() {
     const fetchTags = async () => {
       try {
         const res = await getTags();
-        setTags(res.tags.splice(10));
+        setTags(res.tags);
         setLoading(false);
       } catch (err) {
         console.log(err);

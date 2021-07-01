@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import ArticleCard from "./components/ArticleCard";
+import ArticleCard from "./components/Article Pages/ArticleCard";
 import { NavLink } from "react-router-dom";
 import {
   fetchFeedArticles,
@@ -16,7 +16,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import uuid from "react-uuid";
 import { isUserLoggedIn } from "./features/authentication/signup";
-import Pagination from "./components/Pagination";
+import Pagination from "./components/Article Pages/Pagination";
 import Skeleton from "react-loading-skeleton";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from "react-loader-spinner";
@@ -28,7 +28,7 @@ function App() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { search } = useLocation();
-  // const { pathname } = useLocation();
+  const { pathname } = useLocation();
 
   let { page } = queryString.parse(search);
   if (page === undefined) page = 1;
@@ -36,7 +36,6 @@ function App() {
   const isLoggedIn = useSelector(isUserLoggedIn);
   const getActiveItem = useSelector(activeItem);
   const isLoading = useSelector(loading);
-  let NavItems = useSelector(navItems);
 
   const articles = useSelector(getArticles);
   const articlesCount = useSelector(getArticlesCount);
@@ -45,6 +44,7 @@ function App() {
     getPageArticles: fetchGlobalArticles,
   });
 
+  let NavItems = useSelector(navItems);
   // Checks which tab to show depending if user has logged in or not
   const checkNav = (NavItem) => {
     if (isLoggedIn === false && NavItem === "Your Feed") {
@@ -59,37 +59,27 @@ function App() {
       await dispatch(activeTab.getPageArticles(page));
     };
     const getFeedArticlesByTag = async () => {
-      await dispatch(fetchArticlesByTag({ page, tag: getActiveItem }));
+      await dispatch(fetchArticlesByTag({ page, tag: pathname.slice(1, -1) }));
     };
-
-    if (getActiveItem === "Global Feed" || getActiveItem === "Your Feed") {
+    if (pathname === "/global/" || pathname === "/myfeed/") {
       getFeedArticles();
-    } else if (getActiveItem !== "undefined" && getActiveItem) {
-      console.log(getActiveItem);
+    } else if (pathname !== "undefined" && pathname) {
       getFeedArticlesByTag();
     }
-  }, [page, activeTab]);
-
-  // useEffect(()=>{
-  //    if(activeItem!=='Global Feed' && activeItem!=="Your Feed"){
-  //     setActiveTab({
-  //       getPageArticles:fetchArticlesByTag
-  //     })
-  //     history.push(`/${activeItem.trim()}/?page=1`)
-  //    }
-  // },[activeItem])
+  }, [page, pathname]);
 
   useEffect(() => {
+    //Just for intial page load
     history.push("/global/?page=1");
   }, []);
 
-  const handleFeed = async (item) => {
+  const handleNavItemClick = async (item) => {
     if (item === "Global Feed") {
       setActiveTab({
         getPageArticles: fetchGlobalArticles,
       });
       history.push("/global/?page=1");
-    } else {
+    } else if (item === "Your Feed") {
       setActiveTab({
         getPageArticles: fetchFeedArticles,
       });
@@ -106,7 +96,7 @@ function App() {
               className={getActiveItem === item ? "active" : null}
               key={item}
               onClick={() => {
-                handleFeed(item);
+                handleNavItemClick(item);
               }}
             >
               {item}

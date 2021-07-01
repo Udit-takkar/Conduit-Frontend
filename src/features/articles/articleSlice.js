@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { getToken } from "../../api/Token";
+import axios from "../../config/api.config";
+
 const initialState = {
   loading: false,
   error: null,
@@ -10,23 +10,14 @@ const initialState = {
   activeItem: "Global Feed",
 };
 
-const FeedArticlesURL =
-  "https://conduit.productionready.io/api/articles/feed?limit=10&offset=";
-const globalURL =
-  "https://conduit.productionready.io/api/articles?limit=10&offset=";
-const tagURL = "https://conduit.productionready.io/api/articles?tag=";
-
 export const fetchFeedArticles = createAsyncThunk(
   "articles/feed",
-  async (page) => {
-    const token = getToken();
+  async (page, { getState }) => {
     try {
-      const response = await axios.get(`${FeedArticlesURL}${(page - 1) * 10}`, {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      });
-      console.log(response.data);
+      const response = await axios.get(
+        `/articles/feed?limit=10&offset=${(page - 1) * 10}`
+      );
+
       return response.data;
     } catch (e) {
       console.log(e.response);
@@ -36,13 +27,17 @@ export const fetchFeedArticles = createAsyncThunk(
 );
 export const fetchGlobalArticles = createAsyncThunk(
   "articles/global",
-  async (page) => {
+  async (page, { getState }) => {
+    console.log(getState());
     try {
-      const response = await axios.get(`${globalURL}${(page - 1) * 10}`);
+      console.log("Fetch global");
+      const response = await axios.get(
+        `/articles?limit=10&offset=${(page - 1) * 10}`
+      );
       console.log(response.data);
       return response.data;
     } catch (e) {
-      console.log(e);
+      console.log(e.response);
       return e;
     }
   }
@@ -56,7 +51,7 @@ export const fetchArticlesByTag = createAsyncThunk(
     console.log(page, tag);
     try {
       const response = await axios.get(
-        `${tagURL}${tag}&limit=10&offset=${(page - 1) * 10}`
+        `/articles?tag=${tag}&limit=10&offset=${(page - 1) * 10}`
       );
       return response.data;
     } catch (err) {
@@ -65,10 +60,6 @@ export const fetchArticlesByTag = createAsyncThunk(
     }
   }
 );
-
-// const addTag=(state,tag)=>{
-//   console.log(state)
-// }
 
 export const articleSlice = createSlice({
   name: "articles",
@@ -151,12 +142,8 @@ export const articleSlice = createSlice({
     [fetchArticlesByTag.fulfilled]: (state, action) => {
       let updateNavItems = state.navItems;
 
-      if (state.navItems.length === 3) {
-        // check if a tag tab is already open
-        updateNavItems[2] = action.meta.arg.tag; //Just replace it with new tag
-      } else {
-        updateNavItems = [...updateNavItems, action.meta.arg.tag];
-      }
+      updateNavItems[2] = action.meta.arg.tag; //Just replace it with new tag
+
       console.log(action);
       Object.assign(state, {
         loading: false,
@@ -175,7 +162,7 @@ export const articleSlice = createSlice({
         articles: [],
         articlesCount: 0,
         navItems: ["Your Feed", "Global Feed"],
-        activeItem: action.meta.arg.tag,
+        activeItem: "Global Feed",
       });
     },
   },

@@ -7,11 +7,11 @@ import {
   getUserBio,
   update,
   error,
-} from "../features/authentication/signup";
+} from "../../features/authentication/signup";
 import { useSelector, useDispatch } from "react-redux";
-import { updateUser } from "../api/updateUser";
+import { updateUser } from "../../ApiEndpoints/user";
 import { useHistory } from "react-router-dom";
-import { logoutUser } from "../features/authentication/signup";
+import { logoutUser } from "../../features/authentication/signup";
 import {
   faLink,
   faUser,
@@ -19,6 +19,7 @@ import {
   faKey,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 
 function Settings() {
   const dispatch = useDispatch();
@@ -53,10 +54,16 @@ function Settings() {
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    localStorage.removeItem("user");
-    await dispatch(logoutUser());
-
-    history.push("/");
+    try {
+      await dispatch(logoutUser());
+      localStorage.removeItem("user");
+      const res = await axios.delete("/logout");
+      history.push("/");
+    } catch (err) {
+      if (err.response.status === 403 || err.response.status === 401) {
+        window.location.href = "http://localhost:3000/login";
+      }
+    }
   };
   return (
     <>

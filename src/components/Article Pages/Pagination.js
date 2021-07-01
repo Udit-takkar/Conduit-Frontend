@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { navItems } from "../features/articles/articleSlice";
-import { fetchArticlesByTag } from "../features/articles/articleSlice";
+import { navItems } from "../../features/articles/articleSlice";
+import { fetchArticlesByTag } from "../../features/articles/articleSlice";
 import { useHistory } from "react-router-dom";
 
 function Pagination({

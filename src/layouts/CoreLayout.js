@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
-import Banner from "../components/Banner";
+import Banner from "../components/Banners/Banner";
 import Tags from "../components/Tags";
 import App from "../App";
 import { isUserLoggedIn } from "../features/authentication/signup";

@@ -1,12 +1,14 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
+import { store } from "./app/store";
 
 function PrivateRoute({ children, ...rest }) {
+  // console.log(store.getState().signup.isLoggedIn);
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        localStorage.getItem("user") ? (
+        store.getState().signup.isLoggedIn ? (
           children
         ) : (
           <Redirect

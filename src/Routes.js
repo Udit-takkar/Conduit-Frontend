@@ -1,12 +1,12 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import SignIn from "./components/SignIn";
+import SignIn from "./components/Auth Pages/SignIn";
 import CoreLayout from "./layouts/CoreLayout";
-import SignUp from "./components/SignUp";
-import Settings from "./components/Settings";
+import SignUp from "./components/Auth Pages/SignUp";
+import Settings from "./components/Settings Page/Settings";
 import NewPost from "./components/NewPost";
-import Profile from "./components/Profile";
-import ArticleDisplay from "./components/ArticleDisplay";
+import Profile from "./components/Profile Page/Profile";
+import ArticleDisplay from "./components/Article Pages/ArticleDisplay";
 import PrivateRoute from "./PrivateRoute";
 import Header from "./components/Header";
 

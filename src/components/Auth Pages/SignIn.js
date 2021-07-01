@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { login } from "../features/authentication/signup";
+import { login } from "../../features/authentication/signup";
 import { Link, Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   isLoading,
   isUserLoggedIn,
   error,
-} from "../features/authentication/signup";
+} from "../../features/authentication/signup";
 import Loader from "react-loader-spinner";
 import { useHistory } from "react-router-dom";
-import SignInIllustration from "../assets/auth_green.svg";
+import SignInIllustration from "../../assets/auth_green.svg";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

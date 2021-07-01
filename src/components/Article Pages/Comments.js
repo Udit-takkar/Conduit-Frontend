@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getCommentsBySlug } from "../api/Comments";
+import { getCommentsBySlug } from "../../ApiEndpoints/articles";
 import CommentCard from "./CommentCard";
-import { DeleteComment } from "../api/DeleteComment";
+import { DeleteComment } from "../../ApiEndpoints/articles";
 
 function Comments({ slug, Loading }) {
   const [comments, setComments] = useState([]);

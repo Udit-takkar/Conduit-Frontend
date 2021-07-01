@@ -5,7 +5,7 @@ import {
   getUserBio,
   getUserImg,
   isUserLoggedIn,
-} from "../features/authentication/signup";
+} from "../../features/authentication/signup";
 import { useSelector } from "react-redux";
 import {
   faCog,
@@ -14,9 +14,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Redirect, Link, useHistory } from "react-router-dom";
-import { CheckFollowing } from "../api/CheckFollowing";
-import { Follow } from "../api/Follow";
-import { UnFollow } from "../api/Unfollow";
+import { CheckFollowing } from "../../ApiEndpoints/profiles";
+import { Follow } from "../../ApiEndpoints/profiles";
+import { UnFollow } from "../../ApiEndpoints/profiles";
 
 function ProfileBanner({ username, LoggedInUsername }) {
   console.log(LoggedInUsername, username);

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { postArticle } from "../api/postArticle";
+import { postArticle } from "../ApiEndpoints/articles";
 import { Redirect, useHistory } from "react-router-dom";
 import { getUsername } from "../features/authentication/signup";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { updateArticle } from "../api/updateArticle";
-import Yamde from "yamde";
+import { updateArticle } from "../ApiEndpoints/articles";
 import { MdTitle } from "react-icons/md";
+import Yamde from "yamde";
 import {
   faHeading,
   faParagraph,
@@ -44,7 +44,7 @@ function NewPost() {
   };
 
   const handleEditor = (e) => {
-    console.log(e);
+    // console.log(typeof e);
     setFormState({ ...formState, body: e });
   };
 
@@ -183,7 +183,8 @@ const NewPostContainer = styled.div`
     border: none;
     margin-top: 15px;
     cursor: pointer;
-    width: 850px;
+    width: 63.5%;
+    margin-bottom:30px
   }
   }
 `;
@@ -197,7 +198,10 @@ const Error = styled.div`
 `;
 
 const Editor = styled.div`
-  width: 850px;
+  margin-top: 20px;
+  width: 63.5%;
+  height: 350px;
+  margin-bottom: 30px;
 `;
 
 export default NewPost;

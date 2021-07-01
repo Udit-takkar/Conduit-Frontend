@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { getArticleBySlug } from "../api/ArticleByslug";
+import { getArticleBySlug } from "../../ApiEndpoints/articles";
 import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Comments from "./Comments";
-import { isUserLoggedIn, getUsername } from "../features/authentication/signup";
+import {
+  isUserLoggedIn,
+  getUsername,
+} from "../../features/authentication/signup";
 import { useSelector } from "react-redux";
-import { deleteArticle } from "../api/DeleteArticle";
+import { deleteArticle } from "../../ApiEndpoints/articles";
 import { useHistory } from "react-router-dom";
-import { postComment } from "../api/PostComment";
+import { postComment } from "../../ApiEndpoints/articles";
 import Loader from "react-loader-spinner";
 import ReactMarkdown from "react-markdown";
 
@@ -77,18 +80,20 @@ function ArticleDisplay() {
   }, []);
 
   const sendComment = async () => {
-    setComment({ ...comment, Loading: true });
-    const res = await postComment(slug, comment.comment);
-    if (res.status === 401) {
+    if (isLoggedIn === true) {
+      setComment({ ...comment, Loading: true });
+      const res = await postComment(slug, comment.comment);
+
+      if (res.comment) {
+        setComment({ comment: "", Loading: false });
+        const cmtBox = document.getElementById("CommentBox");
+        console.log(cmtBox.scrollHeight);
+        window.scrollTo({ top: cmtBox.scrollHeight, behaviour: "smooth" });
+      }
+      console.log(comment);
+    } else {
       history.push("/signin");
     }
-    if (res.comment) {
-      setComment({ comment: "", Loading: false });
-      const cmtBox = document.getElementById("CommentBox");
-      console.log(cmtBox.scrollHeight);
-      window.scrollTo({ top: cmtBox.scrollHeight, behaviour: "smooth" });
-    }
-    console.log(comment);
   };
 
   const handleChange = (e) => {
