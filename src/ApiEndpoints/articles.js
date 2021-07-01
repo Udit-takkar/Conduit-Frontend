@@ -94,8 +94,10 @@ export const myArticles = async (page, username) => {
     return e.response;
   }
 };
-
+let count = 0;
 export const postArticle = async ({ title, description, body, tagList }) => {
+  count++;
+  console.log(count);
   try {
     const res = await axios.post("/articles", {
       article: {
@@ -105,9 +107,11 @@ export const postArticle = async ({ title, description, body, tagList }) => {
         tagList,
       },
     });
+    console.log("Post request");
+
     return res.data;
   } catch (err) {
-    console.log(err.response);
+    console.log(err);
     return err.response;
   }
 };
@@ -119,7 +123,7 @@ export const postComment = async (slug, body) => {
         body,
       },
     });
-    console.log(res);
+
     return res.data;
   } catch (err) {
     return err.response;

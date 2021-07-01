@@ -1,13 +1,6 @@
 import Axios from "axios";
 import { API_BASE_URL } from "../constants/api";
 import myLog from "../utils/myLog";
-import jwt_decode from "jwt-decode";
-
-let token = null;
-
-export const setToken = (tkn) => {
-  token = tkn;
-};
 
 const axios = Axios.create({
   baseURL: API_BASE_URL,
@@ -17,36 +10,6 @@ const axios = Axios.create({
   withCredentials: true,
 });
 axios.defaults.withCredentials = true;
-axios.interceptors.request.use(
-  (config) => {
-    let request = config;
-
-    if (token) {
-      const decoded = jwt_decode(token);
-      if (decoded.exp < Date.now() / 1000) {
-        Axios.post("/refresh")
-          .then((res) => {
-            console.log("Refreshing");
-            setToken(res.data.access_token);
-          })
-          .catch((err) => {
-            if (err.response.status === 401) {
-              //dispatch logout
-              window.location.href = "http://localhost:3000/login";
-            }
-          });
-      }
-    }
-
-    // if (token && typeof token !== "undefined") {
-    //   request.headers["Authorization"] = `Token ${token}`;
-    // }
-    return request;
-  },
-  (err) => {
-    return Promise.reject(err);
-  }
-);
 
 axios.interceptors.request.use((request) => {
   myLog(
@@ -74,8 +37,31 @@ axios.interceptors.response.use(
     );
     return response;
   },
-  function (error) {
-    console.log(error.response);
+  async function (error) {
+    const originalRequest = error.config;
+    console.log(originalRequest);
+    if (
+      error.response.status === 401 &&
+      error.response.refreshTokenError !== true
+    ) {
+      try {
+        const res = await Axios.post("/refresh");
+        console.log("Refreshing");
+        console.log(res.data);
+        console.log("Sending Back orginal");
+        return axios.request(originalRequest, { withCredentials: true });
+      } catch (err) {
+        if (err.response.status === 401) {
+          // refresh token expired
+          if (localStorage.getItem("user")) localStorage.removeItem("user");
+          window.location.href = "http://localhost:3000/login";
+        }
+      }
+    } else {
+      if (localStorage.getItem("user")) localStorage.removeItem("user");
+
+      window.location.href = "http://localhost:3000/login";
+    }
   }
 );
 
